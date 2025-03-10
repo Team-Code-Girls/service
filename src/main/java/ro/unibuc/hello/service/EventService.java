@@ -1,7 +1,7 @@
 package ro.unibuc.hello.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import main.java.ro.unibuc.hello.data.Event;
 import ro.unibuc.hello.data.EventRepository;
 import java.util.List;
@@ -43,7 +43,7 @@ public class EventService {
     }
 
     public Optional<Event> getEventByEventName(String eventName){
-        return eventRepository.findByEventName(eventName);
+      return eventRepository.findByEventName(eventName);
     }
 
     public List<Event> getEventsByOrganizerId(String organizerId){

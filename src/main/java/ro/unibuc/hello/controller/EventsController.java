@@ -60,11 +60,11 @@ public class EventsController {
 
     @GetMapping("/eventName/{eventName}")
     public ResponseEntity<Event> getEventByEventName(@PathVariable String eventName) {
-        Event event = eventsService.getEventByEventName(eventName);
-        return event != null
-                ? new ResponseEntity<>(event, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Optional<Event> optionalEvent = eventsService.getEventByEventName(eventName);
+        return optionalEvent.map(event -> new ResponseEntity<>(event, HttpStatus.OK))
+                            .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+    
 
     @GetMapping("/organizer/{organizerId}")
     public ResponseEntity<List<Event>> getEventsByOrganizerId(@PathVariable String organizerId) {
