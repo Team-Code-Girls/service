@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import ro.unibuc.hello.data.InformationEntity;
-import ro.unibuc.hello.data.InformationRepository;
+import main.java.ro.unibuc.hello.data.Event;
+import ro.unibuc.hello.data.EventRepository;
 
 import jakarta.annotation.PostConstruct;
  
 @SpringBootApplication
-@EnableMongoRepositories(basePackageClasses = InformationRepository.class)
+@EnableMongoRepositories(basePackageClasses = EventRepository.class)
 public class HelloApplication {
 
 	@Autowired

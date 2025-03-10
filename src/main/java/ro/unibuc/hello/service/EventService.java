@@ -2,7 +2,7 @@ package ro.unibuc.hello.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ro.unibuc.hello.data.Event;
+import main.java.ro.unibuc.hello.data.Event;
 import ro.unibuc.hello.data.EventRepository;
 import java.util.List;
 import java.util.Optional;

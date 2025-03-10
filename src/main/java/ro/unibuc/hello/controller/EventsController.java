@@ -3,7 +3,7 @@ package main.java.ro.unibuc.hello.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Controller;
 
-import ro.unibuc.hello.data.Event;
+import main.java.ro.unibuc.hello.data.Event;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 import ro.unibuc.hello.service.EventService;
 import org.springframework.http.ResponseEntity;
