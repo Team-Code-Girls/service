@@ -8,24 +8,6 @@ import ro.unibuc.hello.data.EventEntity;
 import ro.unibuc.hello.data.EventRepository;
 
 import jakarta.annotation.PostConstruct;
- 
-@SpringBootApplication
-@EnableMongoRepositories(basePackageClasses = EventRepository.class)
-public class HelloApplication {
-
-	@Autowired
-	private EventRepository eventRepository;
-
-	public static void main(String[] args) {
-		SpringApplication.run(HelloApplication.class, args);
-	}
-
-	// @PostConstruct
-	// public void runAfterObjectCreated() {
-	// 	informationRepository.deleteAll();
-	// 	informationRepository.save(new InformationEntity("Overview",
-	// 			"This is an example of using a data storage engine running separately from our applications server"));
-	// }
 import ro.unibuc.hello.data.UserRepository;
 
 @SpringBootApplication

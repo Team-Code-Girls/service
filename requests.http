@@ -1,4 +1,3 @@
-
 ### Create a new event
 POST http://localhost:8080/events
 Content-Type: application/json
@@ -8,6 +7,8 @@ Content-Type: application/json
     "name": "Eveniment test",
     "organizerId": "5678",
     "date": "2025-06-01",
+    "totalTickets": 100,
+    "soldTickets":0,
     "location": "Bucharest",
     "description": "Descriere eveniment test"
 }
@@ -27,9 +28,23 @@ Content-Type: application/json
     "name": "Updated Eveniment",
     "organizerId": "5678",
     "date": "2025-06-02",
+    "totalTickets":80,
+    "soldTickets":10,
     "location": "Cluj-Napoca",
     "description": "Descriere update."
 }
+
+
+### Get event by event name 
+@eventName = Updated Eveniment
+GET http://localhost:8080/events/eventName/{{eventName}}
+
+### Get events by organizer ID 
+@organizerId = 5678
+GET http://localhost:8080/events/organizer/{{organizerId}}
+
+### Delete an event by ID 
+DELETE http://localhost:8080/events/{{eventId}}
 
 ### Create a new user
 @postUserId = 1
