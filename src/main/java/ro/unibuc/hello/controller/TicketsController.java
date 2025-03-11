@@ -1,19 +1,20 @@
-package main.java.ro.unibuc.hello.controller;
+package ro.unibuc.hello.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import main.java.ro.unibuc.hello.data.TicketEntity;
+import ro.unibuc.hello.data.TicketEntity;
 import ro.unibuc.hello.data.TicketRepository;
-import main.java.ro.unibuc.hello.dto.Ticket;
-import main.java.ro.unibuc.hello.service.TicketsService;
+import ro.unibuc.hello.dto.Ticket;
+import ro.unibuc.hello.service.TicketsService;
 
 import ro.unibuc.hello.exception.EntityNotFoundException;
 
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -45,5 +46,17 @@ public class TicketsController {
     @ResponseBody
     public void deleteTicket(@PathVariable String id) throws EntityNotFoundException {
         ticketsService.deleteTicket(id);
+    }
+
+    @GetMapping("/tickets/popular-events")
+    @ResponseBody
+    public List<Map.Entry<String, Long>> getMostPopularEvents() {
+        return ticketsService.getMostPopularEvents();
+    }
+
+    @GetMapping("/tickets/age-stats")
+    @ResponseBody
+    public Map<String, Long> getTicketCountByAgeRange() {
+        return ticketsService.getTicketCountByUserAgeRange();
     }
 }

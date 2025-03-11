@@ -1,4 +1,4 @@
-package main.java.ro.unibuc.hello.data;
+package ro.unibuc.hello.data;
 
 import java.lang.annotation.Inherited;
 

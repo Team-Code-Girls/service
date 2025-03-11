@@ -75,6 +75,44 @@ Content-Type: application/json
     "year": 2025
 }
 
+{
+    "id": "2",
+    "userId": "2",
+    "eventId": "2",
+    "day": 15,
+    "month": 12,
+    "year": 2025
+}
+
+{
+    "id": "3",
+    "userId": "1",
+    "eventId": "3",
+    "day": 5,
+    "month": 11,
+    "year": 2025
+}
+
+{
+    "id": "4",
+    "userId": "2",
+    "eventId": "4",
+    "day": 22,
+    "month": 9,
+    "year": 2025
+}
+
+{
+    "id": "5",
+    "userId": "5",
+    "eventId": "5",
+    "day": 30,
+    "month": 6,
+    "year": 2025
+}
+
+
+
 #DELETE A TICKET
 
 @deleteTicketId = 1
