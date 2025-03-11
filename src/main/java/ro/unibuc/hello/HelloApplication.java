@@ -26,5 +26,16 @@ public class HelloApplication {
 	// 	informationRepository.save(new InformationEntity("Overview",
 	// 			"This is an example of using a data storage engine running separately from our applications server"));
 	// }
+import ro.unibuc.hello.data.UserRepository;
 
+@SpringBootApplication
+@EnableMongoRepositories(basePackageClasses = UserRepository.class)
+public class HelloApplication {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public static void main(String[] args) {
+        SpringApplication.run(HelloApplication.class, args);
+    }
 }

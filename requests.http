@@ -1,3 +1,4 @@
+
 ### Create a new event
 POST http://localhost:8080/events
 Content-Type: application/json
@@ -30,6 +31,147 @@ Content-Type: application/json
     "description": "Descriere update."
 }
 
+### Create a new user
+@postUserId = 1
+@postUserName = Horga Daria 
+@postUserEmail = dariahorga@yahoo.com
+@postUserPhone = 1234567890
+@postUserPassword = helloworld1234
+@postUserAge = 21
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "id": "{{postUserId}}",
+    "fullName": "{{postUserName}}",
+    "email": "{{postUserEmail}}",
+    "age": "{{postUserAge}}",
+    "phoneNumber": "{{postUserPhone}}",
+    "password": "{{postUserPassword}}"
+}
+
+@postUserId2 = 2
+@postUserName2 = Anne Doe
+@postUserEmail2 = adoe@yahoo.com
+@postUserPhone2 = 0745773920
+@postUserPassword2 = password2
+@postUserAge2 = 25
+
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "id": "{{postUserId2}}",
+    "fullName": "{{postUserName2}}",
+    "email": "{{postUserEmail2}}",
+    "age": "{{postUserAge2}}",
+    "phoneNumber": "{{postUserPhone2}}",
+    "password": "{{postUserPassword2}}"
+}
+
+GET http://localhost:8080/users
+
+GET http://localhost:8080/users/{{postUserId}}
+
+@putUserId = 1
+@putUserPhone = 0771208023
+@putUserPassword = newsecurepassword
+PUT http://localhost:8080/users/{{putUserId}}
+Content-Type: application/json
+
+{
+    "id": "{{postUserId}}",
+    "fullName": "{{postUserName}}",
+    "email": "{{postUserEmail}}",
+    "age": "{{postUserAge}}",
+    "phoneNumber": "{{putUserPhone}}",
+    "password": "{{putUserPassword}}"
+}
+
+GET http://localhost:8080/users/email/{{postUserEmail}}
+DELETE http://localhost:8080/users/{{putUserId}}
+
+
+#REQUESTURI PENTRU BILET (TICKET)
+
+#GET ONE TICKET BY ID
+@getTicketId = 1
+GET http://localhost:8080/tickets/{{getTicketId}}
+
+#GET ALL THE TICKETS
+GET http://localhost:8080/tickets
+
+
+POST http://localhost:8080/tickets
+Content-Type: application/json
+
+{
+    "id": "1",
+    "userId": "1",
+    "eventId": "1",
+    "day": 1,
+    "month": 10,
+    "year": 2025
+}
+
+POST http://localhost:8080/tickets
+Content-Type: application/json
+
+{
+    "id": "2",
+    "userId": "2",
+    "eventId": "1",
+    "day": 15,
+    "month": 12,
+    "year": 2025
+}
+
+POST http://localhost:8080/tickets
+Content-Type: application/json
+
+{
+    "id": "3",
+    "userId": "1",
+    "eventId": "2",
+    "day": 5,
+    "month": 11,
+    "year": 2025
+}
+
+POST http://localhost:8080/tickets
+Content-Type: application/json
+
+{
+    "id": "4",
+    "userId": "2",
+    "eventId": "2",
+    "day": 22,
+    "month": 9,
+    "year": 2025
+}
+
+POST http://localhost:8080/tickets
+Content-Type: application/json
+
+{
+    "id": "5",
+    "userId": "5",
+    "eventId": "2",
+    "day": 30,
+    "month": 6,
+    "year": 2025
+}
+
+
+#DELETE A TICKET
+@deleteTicketId = 1
+DELETE http://localhost:8080/tickets/{{deleteTicketId}}
+
+# Get Most Popular Events
+GET http://localhost:8080/tickets/popular-events
+
+# Get Ticket Count by Age Range
+GET http://localhost:8080/tickets/age-stats
 
 ### Get event by event name 
 @eventName = Updated Eveniment
@@ -38,6 +180,6 @@ GET http://localhost:8080/events/eventName/{{eventName}}
 ### Get events by organizer ID 
 @organizerId = 5678
 GET http://localhost:8080/events/organizer/{{organizerId}}
-
 ### Delete an event by ID 
 DELETE http://localhost:8080/events/{{eventId}}
+
