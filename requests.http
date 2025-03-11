@@ -59,4 +59,69 @@ GET http://localhost:8080/users/email/{{postUserEmail}}
 DELETE http://localhost:8080/users/{{putUserId}}
 
 
+#REQUESTURI PENTRU BILET (TICKET)
+
+#GET ONE TICKET BY ID
+@getTicketId = 1
+GET http://localhost:8080/tickets/{{getTicketId}}
+
+#GET ALL THE TICKETS
+GET http://localhost:8080/tickets
+
+#POST A TICKET
+
+POST http://localhost:8080/tickets
+Content-Type: application/json
+
+{
+    "id": "1",
+    "userId": "1",
+    "eventId": "1",
+    "day": 1,
+    "month": 10,
+    "year": 2025
+}
+
+{
+    "id": "2",
+    "userId": "2",
+    "eventId": "2",
+    "day": 15,
+    "month": 12,
+    "year": 2025
+}
+
+{
+    "id": "3",
+    "userId": "1",
+    "eventId": "3",
+    "day": 5,
+    "month": 11,
+    "year": 2025
+}
+
+{
+    "id": "4",
+    "userId": "2",
+    "eventId": "4",
+    "day": 22,
+    "month": 9,
+    "year": 2025
+}
+
+{
+    "id": "5",
+    "userId": "5",
+    "eventId": "5",
+    "day": 30,
+    "month": 6,
+    "year": 2025
+}
+
+
+
+#DELETE A TICKET
+
+@deleteTicketId = 1
+DELETE http://localhost:8080/tickets/{{deleteTicketId}}
 
