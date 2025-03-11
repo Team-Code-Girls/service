@@ -1,48 +1,43 @@
-
-# You can use this file to easily send requests to your API.
-# Prerequisite: humao.rest-client Vscode plugin (already present on codespace)
-# High-level overview of REST API concepts used here: https://www.packtpub.com/en-us/learning/how-to-tutorials/what-are-rest-verbs-and-status-codes-tutorial?srsltid=AfmBOoppDqtkhRxj5BLZONRZFzRDmh6eP-xyTo6H4OuEHYuVbrg1d4Dm
-
-
-### Get all events
-GET http://localhost:8080/api/events
-
-### Get event by ID (Replace `eventId` with an actual ID)
-@eventId = 12345
-GET http://localhost:8080/api/events/{{eventId}}
-
 ### Create a new event
-POST http://localhost:8080/api/events
+POST http://localhost:8080/events
 Content-Type: application/json
 
 {
     "id": "12345",
-    "name": "Spring Boot Conference",
+    "name": "Eveniment test",
     "organizerId": "5678",
     "date": "2025-06-01",
     "location": "Bucharest",
-    "description": "An event about Spring Boot best practices."
+    "description": "Descriere eveniment test"
 }
 
-### Update an existing event (Replace `eventId` with an actual ID)
-PUT http://localhost:8080/api/events/{{eventId}}
+### Get all events
+GET http://localhost:8080/events
+
+### Get event by ID 
+@eventId = 12345
+GET http://localhost:8080/events/{{eventId}}
+
+### Update an existing event 
+PUT http://localhost:8080/events/{{eventId}}
 Content-Type: application/json
 
 {
-    "name": "Updated Spring Boot Conference",
+    "name": "Updated Eveniment",
     "organizerId": "5678",
     "date": "2025-06-02",
     "location": "Cluj-Napoca",
-    "description": "Updated details for the event."
+    "description": "Descriere update."
 }
 
-### Delete an event by ID (Replace `eventId` with an actual ID)
-DELETE http://localhost:8080/api/events/{{eventId}}
 
-### Get event by event name (Replace `eventName` with an actual name)
-@eventName = Spring Boot Conference
-GET http://localhost:8080/api/events/eventName/{{eventName}}
+### Get event by event name 
+@eventName = Updated Eveniment
+GET http://localhost:8080/events/eventName/{{eventName}}
 
-### Get events by organizer ID (Replace `organizerId` with an actual ID)
+### Get events by organizer ID 
 @organizerId = 5678
-GET http://localhost:8080/api/events/organizer/{{organizerId}}
+GET http://localhost:8080/events/organizer/{{organizerId}}
+
+### Delete an event by ID 
+DELETE http://localhost:8080/events/{{eventId}}

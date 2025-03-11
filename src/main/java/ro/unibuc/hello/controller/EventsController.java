@@ -15,36 +15,36 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Controller
+@RestController
 public class EventsController {
     
     @Autowired
     private EventService eventsService;
 
-    @PostMapping
+    @PostMapping("/events")
     public EventEntity createEvent(@RequestBody EventEntity event) {
         return eventsService.createEvent(event);
        
     }
 
-    @GetMapping
+    @GetMapping("/events")
     public List<EventEntity> getAllEvents() {
         return eventsService.getAllEvents();
         
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/events/{id}")
     public EventEntity getEventById(@PathVariable String id) {
         return eventsService.getEventById(id);
         
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/events/{id}")
     public EventEntity updateEvent(@PathVariable String id, @RequestBody EventEntity event) {
         return eventsService.updateEvent(id, event);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/events/{id}")
     public void deleteEvent(@PathVariable String id){
         eventsService.deleteEvent(id);
         

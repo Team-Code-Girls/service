@@ -2,7 +2,8 @@ package ro.unibuc.hello.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import main.java.ro.unibuc.hello.data.EventEntity;
+import org.springframework.stereotype.Service;
+import ro.unibuc.hello.data.EventEntity;
 import ro.unibuc.hello.data.EventRepository;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class EventService {
 
     @Autowired
@@ -50,7 +51,7 @@ public class EventService {
     }
 
     public List<EventEntity> getEventsByOrganizerId(String organizerId){
-         List<Event> events =  eventRepository.findByOrganizerId(organizerId);
+         List<EventEntity> events =  eventRepository.findByOrganizerId(organizerId);
          if (events.isEmpty()) {
             throw new EntityNotFoundException("No events found for organizer : " + organizerId);
         }
