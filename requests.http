@@ -50,4 +50,37 @@ Content-Type: application/json
 DELETE http://localhost:8080/greetings/{{deleteGreetingId}}
 
 
-# TODO add requests for your own endpoints!
+
+
+#REQUESTURI PENTRU BILET (TICKET)
+
+#GET ONE TICKET BY ID
+@getTicketId = 1
+GET http://localhost:8080/tickets/{{getTicketId}}
+
+#GET ALL THE TICKETS
+GET http://localhost:8080/tickets
+
+#POST A TICKET
+@postTicketId = 1
+@postTicketUserId = 1
+@postTicketEventId = 1
+@postTicketDay = 1
+@postTicketMonth = 10
+@postTicketYear = 2025
+POST http://localhost:8080/
+Content-Type: application/json
+{
+    "id": {{postTicketId}},
+    "userId": {{postTicketUserId}},
+    "eventId": {{postTicketEventId}},
+    "day": {{postTicketDay}},
+    "month": {{postTicketMonth}},
+    "year": {{postTicketYear}}
+} 
+
+#DELETE A TICKET
+
+@deleteTicketId = 1
+DELETE http://localhost:8080/tickets/{{deleteTicketId}}
+
