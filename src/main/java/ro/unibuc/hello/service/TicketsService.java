@@ -5,11 +5,9 @@ import org.springframework.stereotype.Component;
 
 import ro.unibuc.hello.data.TicketEntity;
 import ro.unibuc.hello.dto.Ticket;
+import ro.unibuc.hello.service.UsersService;
 
-import ro.unibuc.hello.data.InformationEntity;
-import ro.unibuc.hello.data.InformationRepository;
 import ro.unibuc.hello.data.TicketRepository;
-import ro.unibuc.hello.dto.Greeting;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 
 import java.util.HashMap;
@@ -26,6 +24,9 @@ public class TicketsService {
 
     @Autowired
     private TicketRepository ticketsRepository;
+
+    @Autowired
+    private UsersService usersService;
 
     public Ticket saveTicket(Ticket ticket){
         TicketEntity entity = new TicketEntity();

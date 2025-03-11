@@ -68,7 +68,6 @@ GET http://localhost:8080/tickets/{{getTicketId}}
 #GET ALL THE TICKETS
 GET http://localhost:8080/tickets
 
-#POST A TICKET
 
 POST http://localhost:8080/tickets
 Content-Type: application/json
@@ -82,46 +81,63 @@ Content-Type: application/json
     "year": 2025
 }
 
+POST http://localhost:8080/tickets
+Content-Type: application/json
+
 {
     "id": "2",
     "userId": "2",
-    "eventId": "2",
+    "eventId": "1",
     "day": 15,
     "month": 12,
     "year": 2025
 }
 
+POST http://localhost:8080/tickets
+Content-Type: application/json
+
 {
     "id": "3",
     "userId": "1",
-    "eventId": "3",
+    "eventId": "2",
     "day": 5,
     "month": 11,
     "year": 2025
 }
 
+POST http://localhost:8080/tickets
+Content-Type: application/json
+
 {
     "id": "4",
     "userId": "2",
-    "eventId": "4",
+    "eventId": "2",
     "day": 22,
     "month": 9,
     "year": 2025
 }
 
+POST http://localhost:8080/tickets
+Content-Type: application/json
+
 {
     "id": "5",
     "userId": "5",
-    "eventId": "5",
+    "eventId": "2",
     "day": 30,
     "month": 6,
     "year": 2025
 }
 
 
-
 #DELETE A TICKET
-
 @deleteTicketId = 1
 DELETE http://localhost:8080/tickets/{{deleteTicketId}}
+
+# Get Most Popular Events
+GET http://localhost:8080/tickets/popular-events
+
+# Get Ticket Count by Age Range
+GET http://localhost:8080/tickets/age-stats
+
 
