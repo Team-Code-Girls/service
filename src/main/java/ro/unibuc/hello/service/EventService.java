@@ -2,7 +2,7 @@ package ro.unibuc.hello.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import main.java.ro.unibuc.hello.data.Event;
+import main.java.ro.unibuc.hello.data.EventEntity;
 import ro.unibuc.hello.data.EventRepository;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 
@@ -16,20 +16,20 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
-    public Event createEvent(Event event) {
+    public EventEntity createEvent(EventEntity event) {
         return eventRepository.save(event);
     }
 
-    public List<Event> getAllEvents(){
+    public List<EventEntity> getAllEvents(){
         return eventRepository.findAll();
     }
 
-    public Event getEventById(String id){
+    public EventEntity getEventById(String id){
         return eventRepository.findById(id)
                 .orElseThrow( () -> new EntityNotFoundException("Event with id:" +id+" not found."));
     }
 
-    public Event updateEvent(String id, Event updatedEvent){
+    public EventEntity updateEvent(String id, EventEntity updatedEvent){
         if(!eventRepository.existsById(id)){
             throw new EntityNotFoundException("No event with id: "+ id);
         }
@@ -44,12 +44,12 @@ public class EventService {
         }
     }
 
-    public Event getEventByEventName(String eventName){
+    public EventEntity getEventByEventName(String eventName){
       return eventRepository.findByEventName(eventName)
                 .orElseThrow( () -> new EntityNotFoundException("No event with name: " + eventName)) ;
     }
 
-    public List<Event> getEventsByOrganizerId(String organizerId){
+    public List<EventEntity> getEventsByOrganizerId(String organizerId){
          List<Event> events =  eventRepository.findByOrganizerId(organizerId);
          if (events.isEmpty()) {
             throw new EntityNotFoundException("No events found for organizer : " + organizerId);

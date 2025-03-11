@@ -1,9 +1,9 @@
-package main.java.ro.unibuc.hello.controller;
+package ro.unibuc.hello.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import main.java.ro.unibuc.hello.data.Event;
+import ro.unibuc.hello.data.EventEntity;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 import ro.unibuc.hello.service.EventService;
 import org.springframework.http.HttpStatus;
@@ -22,25 +22,25 @@ public class EventsController {
     private EventService eventsService;
 
     @PostMapping
-    public Event createEvent(@RequestBody Event event) {
+    public EventEntity createEvent(@RequestBody EventEntity event) {
         return eventsService.createEvent(event);
        
     }
 
     @GetMapping
-    public List<Event> getAllEvents() {
+    public List<EventEntity> getAllEvents() {
         return eventsService.getAllEvents();
         
     }
 
     @GetMapping("/{id}")
-    public Event getEventById(@PathVariable String id) {
+    public EventEntity getEventById(@PathVariable String id) {
         return eventsService.getEventById(id);
         
     }
 
     @PutMapping("/{id}")
-    public Event updateEvent(@PathVariable String id, @RequestBody Event event) {
+    public EventEntity updateEvent(@PathVariable String id, @RequestBody EventEntity event) {
         return eventsService.updateEvent(id, event);
     }
 
@@ -51,14 +51,14 @@ public class EventsController {
     }
 
     @GetMapping("/eventName/{eventName}")
-    public Event getEventByEventName(@PathVariable String eventName) {
+    public EventEntity getEventByEventName(@PathVariable String eventName) {
         return eventsService.getEventByEventName(eventName);
       
     }
     
 
     @GetMapping("/organizer/{organizerId}")
-    public List<Event> getEventsByOrganizerId(@PathVariable String organizerId) {
+    public List<EventEntity> getEventsByOrganizerId(@PathVariable String organizerId) {
         return eventsService.getEventsByOrganizerId(organizerId);
 
     }

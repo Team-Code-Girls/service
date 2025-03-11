@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import main.java.ro.unibuc.hello.data.Event;
+import ro.unibuc.hello.data.EventEntity;
 import ro.unibuc.hello.data.EventRepository;
 
 import jakarta.annotation.PostConstruct;

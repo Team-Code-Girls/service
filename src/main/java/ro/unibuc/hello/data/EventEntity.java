@@ -1,10 +1,10 @@
-package main.java.ro.unibuc.hello.data;
+package ro.unibuc.hello.data;
 
 import java.lang.annotation.Inherited;
 import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 
-public class Event {
+public class EventEntity {
 
     @Id 
     private String id;
@@ -13,29 +13,32 @@ public class Event {
     private String description;
     private String location;
     private LocalDateTime dateTime;
-    private int availableTickets;
+    private int totalTickets;
+    private int soldTickets;
     private int ticketPrice;
     private String organizerId;
 
-    public Event(){}
+    public EventEntity(){}
 
-    public Event(String eventName, String description, String location, LocalDateTime dateTime, int availableTickets, int ticketPrice, String organizerId){
+    public EventEntity(String eventName, String description, String location, LocalDateTime dateTime, int totalTickets, int soldTickets, int ticketPrice, String organizerId){
         this.eventName = eventName;
         this.description = description;
         this.location = location;
         this.dateTime = dateTime;
-        this.availableTickets = availableTickets;
+        this.totalTickets = totalTickets;
+        this.soldTickets = soldTickets;
         this.ticketPrice = ticketPrice;
         this.organizerId = organizerId;
     }
 
-    public Event(String id, String eventName, String description, String location, LocalDateTime dateTime, int availableTickets, int ticketPrice, String organizerId) {
+    public EventEntity(String id, String eventName, String description, String location, LocalDateTime dateTime, int totalTickets, int soldTickets, int ticketPrice, String organizerId) {
         this.id = id;
         this.eventName = eventName;
         this.description = description;
         this.location = location;
         this.dateTime = dateTime;
-        this.availableTickets = availableTickets;
+        this.totalTickets = totalTickets;
+        this.soldTickets = soldTickets;
         this.ticketPrice = ticketPrice;
         this.organizerId = organizerId;
     }
@@ -55,8 +58,11 @@ public class Event {
     public LocalDateTime getDateTime() { return dateTime; }
     public void setDateTime(LocalDateTime dateTime) { this.dateTime = dateTime; }
 
-    public int getAvailableTickets() { return availableTickets; }
-    public void setAvailableTickets(int availableTickets) { this.availableTickets = availableTickets; }
+    public int getTotalTickets() { return totalTickets; }
+    public void setTotalTickets(int totalTickets) { this.totalTickets = totalTickets; }
+
+    public int getSoldTickets() { return soldTickets; }
+    public void setSoldTickets(int soldTickets) { this.soldTickets = soldTickets; }
 
     public int getTicketPrice() { return ticketPrice;}
     public void setTicketPrice(int ticketPrice){this.ticketPrice = ticketPrice;}
@@ -67,8 +73,8 @@ public class Event {
     @Override
     public String toString() {
         String result = String.format(
-            "Event[id='%s', eventName='%s', location='%s', dateTime='%s', availableTickets=%d, ticketPrice=%d, organizerId='%s']",
-            id, eventName, location, dateTime, availableTickets, ticketPrice, organizerId);
+            "Event[id='%s', eventName='%s', location='%s', dateTime='%s', totalTickets=%d, soldTickets=%d, ticketPrice=%d, organizerId='%s']",
+            id, eventName, location, dateTime, totalTickets,soldTickets, ticketPrice, organizerId);
     
         if (description != null && !description.isEmpty()) {
             result += ", description= " + description;
