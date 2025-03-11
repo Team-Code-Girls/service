@@ -25,6 +25,7 @@ public class Event {
         this.location = location;
         this.dateTime = dateTime;
         this.availableTickets = availableTickets;
+        this.ticketPrice = ticketPrice;
         this.organizerId = organizerId;
     }
 
@@ -35,6 +36,7 @@ public class Event {
         this.location = location;
         this.dateTime = dateTime;
         this.availableTickets = availableTickets;
+        this.ticketPrice = ticketPrice;
         this.organizerId = organizerId;
     }
 

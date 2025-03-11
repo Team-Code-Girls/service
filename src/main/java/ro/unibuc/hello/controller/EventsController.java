@@ -1,12 +1,11 @@
 package main.java.ro.unibuc.hello.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Controller;
 
 import main.java.ro.unibuc.hello.data.Event;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 import ro.unibuc.hello.service.EventService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
 
@@ -16,62 +15,52 @@ import java.util.List;
 import java.util.Optional;
 
 
-@RestController
-@RequestMapping("/api/events")
+@Controller
 public class EventsController {
     
     @Autowired
     private EventService eventsService;
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
-        Event createdEvent = eventsService.createEvent(event);
-        return new ResponseEntity<>(createdEvent, HttpStatus.CREATED);
+    public Event createEvent(@RequestBody Event event) {
+        return eventsService.createEvent(event);
+       
     }
 
     @GetMapping
-    public ResponseEntity<List<Event>> getAllEvents() {
-        List<Event> events = eventsService.getAllEvents();
-        return new ResponseEntity<>(events, HttpStatus.OK);
+    public List<Event> getAllEvents() {
+        return eventsService.getAllEvents();
+        
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getEventById(@PathVariable String id) {
-        Optional<Event> event = eventsService.getEventById(id);
-        return event.map(e -> new ResponseEntity<>(e, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public Event getEventById(@PathVariable String id) {
+        return eventsService.getEventById(id);
+        
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable String id, @RequestBody Event event) {
-        Event updatedEvent = eventsService.updateEvent(id, event);
-        return updatedEvent != null
-                ? new ResponseEntity<>(updatedEvent, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public Event updateEvent(@PathVariable String id, @RequestBody Event event) {
+        return eventsService.updateEvent(id, event);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEvent(@PathVariable String id) {
-        boolean isDeleted = eventsService.deleteEvent(id);
-        return isDeleted
-                ? new ResponseEntity<>("Event deleted", HttpStatus.NO_CONTENT)
-                : new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+    public void deleteEvent(@PathVariable String id){
+        eventsService.deleteEvent(id);
+        
     }
 
     @GetMapping("/eventName/{eventName}")
-    public ResponseEntity<Event> getEventByEventName(@PathVariable String eventName) {
-        Optional<Event> optionalEvent = eventsService.getEventByEventName(eventName);
-        return optionalEvent.map(event -> new ResponseEntity<>(event, HttpStatus.OK))
-                            .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public Event getEventByEventName(@PathVariable String eventName) {
+        return eventsService.getEventByEventName(eventName);
+      
     }
     
 
     @GetMapping("/organizer/{organizerId}")
-    public ResponseEntity<List<Event>> getEventsByOrganizerId(@PathVariable String organizerId) {
-        List<Event> events = eventsService.getEventsByOrganizerId(organizerId);
-        return events.isEmpty()
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(events, HttpStatus.OK);
+    public List<Event> getEventsByOrganizerId(@PathVariable String organizerId) {
+        return eventsService.getEventsByOrganizerId(organizerId);
+
     }
    
 }
