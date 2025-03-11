@@ -14,11 +14,12 @@ public class Event {
     private String location;
     private LocalDateTime dateTime;
     private int availableTickets;
+    private int ticketPrice;
     private String organizerId;
 
     public Event(){}
 
-    public Event(String eventName, String description, String location, LocalDateTime dateTime, int availableTickets, String organizerId){
+    public Event(String eventName, String description, String location, LocalDateTime dateTime, int availableTickets, int ticketPrice, String organizerId){
         this.eventName = eventName;
         this.description = description;
         this.location = location;
@@ -27,7 +28,7 @@ public class Event {
         this.organizerId = organizerId;
     }
 
-    public Event(String id, String eventName, String description, String location, LocalDateTime dateTime, int availableTickets, String organizerId) {
+    public Event(String id, String eventName, String description, String location, LocalDateTime dateTime, int availableTickets, int ticketPrice, String organizerId) {
         this.id = id;
         this.eventName = eventName;
         this.description = description;
@@ -55,14 +56,17 @@ public class Event {
     public int getAvailableTickets() { return availableTickets; }
     public void setAvailableTickets(int availableTickets) { this.availableTickets = availableTickets; }
 
+    public int getTicketPrice() { return ticketPrice;}
+    public void setTicketPrice(int ticketPrice){this.ticketPrice = ticketPrice;}
+
     public String getOrganizerId() { return organizerId; }
     public void setOrganizerId(String organizerId) { this.organizerId = organizerId; }
 
     @Override
     public String toString() {
         String result = String.format(
-            "Event[id='%s', eventName='%s', location='%s', dateTime='%s', availableTickets=%d, organizerId='%s']",
-            id, eventName, location, dateTime, availableTickets, organizerId);
+            "Event[id='%s', eventName='%s', location='%s', dateTime='%s', availableTickets=%d, ticketPrice=%d, organizerId='%s']",
+            id, eventName, location, dateTime, availableTickets, ticketPrice, organizerId);
     
         if (description != null && !description.isEmpty()) {
             result += ", description= " + description;
