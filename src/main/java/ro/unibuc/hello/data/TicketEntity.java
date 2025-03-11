@@ -56,7 +56,7 @@ public class TicketEntity {
     public String getEventId(){
         return eventId;
     }
-    public void setEventId(string eventId){
+    public void setEventId(String eventId){
         this.eventId = eventId;
     }
 
@@ -88,6 +88,6 @@ public class TicketEntity {
         return String.format(
             "Bilet[id=%s, userId=%s, eventId=%s, day=%d, month=%d, year=%d]",
              id, userId, eventId, day, month, year
-        )
+        );
     }
 }

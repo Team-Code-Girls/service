@@ -62,22 +62,18 @@ GET http://localhost:8080/tickets/{{getTicketId}}
 GET http://localhost:8080/tickets
 
 #POST A TICKET
-@postTicketId = 1
-@postTicketUserId = 1
-@postTicketEventId = 1
-@postTicketDay = 1
-@postTicketMonth = 10
-@postTicketYear = 2025
-POST http://localhost:8080/
+
+POST http://localhost:8080/tickets
 Content-Type: application/json
+
 {
-    "id": {{postTicketId}},
-    "userId": {{postTicketUserId}},
-    "eventId": {{postTicketEventId}},
-    "day": {{postTicketDay}},
-    "month": {{postTicketMonth}},
-    "year": {{postTicketYear}}
-} 
+    "id": "1",
+    "userId": "1",
+    "eventId": "1",
+    "day": 1,
+    "month": 10,
+    "year": 2025
+}
 
 #DELETE A TICKET
 
