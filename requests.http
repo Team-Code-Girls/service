@@ -8,7 +8,8 @@ Content-Type: application/json
     "organizerId": "5678",
     "date": "2025-06-01",
     "totalTickets": 100,
-    "soldTickets":0,
+    "soldTickets":90,
+    "ticketPrice":50,
     "location": "Bucharest",
     "description": "Descriere eveniment test"
 }
@@ -28,8 +29,8 @@ Content-Type: application/json
     "name": "Updated Eveniment",
     "organizerId": "5678",
     "date": "2025-06-02",
-    "totalTickets":80,
-    "soldTickets":10,
+    "totalTickets":100,
+    "soldTickets":90,
     "location": "Cluj-Napoca",
     "description": "Descriere update."
 }
