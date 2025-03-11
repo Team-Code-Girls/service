@@ -13,6 +13,39 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Controller
+public class TicketsController {
+
+    @Autowired
+    private TicketsService ticketsService;
+
+    @GetMapping("/tickets")
+
+
+    @GetMapping("/tickets/{id}")
+
+    @PostMapping("/tickets")
+    @ResponseBody
+    public List<Ticket> getAllTickets() {
+        return ticketsService.getAllTickets();
+    }
+
+    @DeleteMapping("/tickets/{id}")
+    @ResponseBody
+    public void deleteTicket(@PathVariable String id) throws EntityNotFoundException {
+        ticketsService.deleteTicket(id);
+    }
+}
+
+
+
+
+
+
+
+
+
+
 @RestController
 @RequestMapping("/api/tickets")
 public class TicketsController {
