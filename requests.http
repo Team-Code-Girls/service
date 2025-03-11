@@ -1,3 +1,36 @@
+
+### Create a new event
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{
+    "id": "12345",
+    "name": "Eveniment test",
+    "organizerId": "5678",
+    "date": "2025-06-01",
+    "location": "Bucharest",
+    "description": "Descriere eveniment test"
+}
+
+### Get all events
+GET http://localhost:8080/events
+
+### Get event by ID 
+@eventId = 12345
+GET http://localhost:8080/events/{{eventId}}
+
+### Update an existing event 
+PUT http://localhost:8080/events/{{eventId}}
+Content-Type: application/json
+
+{
+    "name": "Updated Eveniment",
+    "organizerId": "5678",
+    "date": "2025-06-02",
+    "location": "Cluj-Napoca",
+    "description": "Descriere update."
+}
+
 ### Create a new user
 @postUserId = 1
 @postUserName = Horga Daria 
@@ -140,4 +173,13 @@ GET http://localhost:8080/tickets/popular-events
 # Get Ticket Count by Age Range
 GET http://localhost:8080/tickets/age-stats
 
+### Get event by event name 
+@eventName = Updated Eveniment
+GET http://localhost:8080/events/eventName/{{eventName}}
+
+### Get events by organizer ID 
+@organizerId = 5678
+GET http://localhost:8080/events/organizer/{{organizerId}}
+### Delete an event by ID 
+DELETE http://localhost:8080/events/{{eventId}}
 
