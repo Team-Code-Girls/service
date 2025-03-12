@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @Service
 public class BuyTicketService {
@@ -46,6 +47,52 @@ public class BuyTicketService {
     private EventService eventService;
 
     public void buyTicket(String eventId, String userId){
+
+        EventEntity event = eventRepository.findById(eventId).orElseThrow(
+            () -> new EntityNotFoundException("No event with id: " + eventId));
+        UserEntity user = userRepository.findById(userId).orElseThrow(
+            () -> new EntityNotFoundException("No user with id: " + userId));
+
+        LocalDate currentDate = LocalDate.now();
+
+        int day = currentDate.getDayOfMonth();
+        int month = currentDate.getMonthValue();
+        int year = currentDate.getYear();
+
+        if(event.getSoldTickets()<event.getTotalTickets()){
+            event.setSoldTickets(event.getSoldTickets()+1);
+            eventService.updateEvent(eventId, event);
+            List<Ticket> tickets = ticketService.getAllTickets();
+            int idTicket = tickets.size();
+            TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), eventId, userId, day, month, year);
+            ticketRepository.save(ticket);
+            int priceTicket = event.getTicketPrice();
+            int numberOfPoints = 0;
+
+            if(priceTicket>0&&priceTicket<50){
+                numberOfPoints = 2;
+            }else{
+                if(priceTicket>=50&&priceTicket<100){
+                    numberOfPoints = 5;
+                }else{
+                    if(priceTicket>=100&&priceTicket<150){
+                        numberOfPoints = 10;
+                    }else{
+                        if(priceTicket>=150&&priceTicket<200){
+                            numberOfPoints = 15;
+                        }else{
+                            numberOfPoints = 20;
+                        }
+                    }
+                }
+            }
+            user.setPoints(user.getPoints()+numberOfPoints);
+        }else{
+            throw new EntityNotFoundException("No tickets available for event: " + eventId);
+        }
+    }
+
+    public void buyTicketWithDiscountedPrice(String eventId, String userId){
         EventEntity event = eventRepository.findById(eventId).orElseThrow(
             () -> new EntityNotFoundException("No event with id: " + eventId));
         UserEntity user = userRepository.findById(userId).orElseThrow(
@@ -67,6 +114,59 @@ public class BuyTicketService {
         }else{
             throw new EntityNotFoundException("No tickets available for event: " + eventId);
         }
+    }
+
+    public buyTicketWithDiscount(String eventId, String userId, int discount){
+
+        EventEntity event = eventRepository.findById(eventId).orElseThrow(
+            () -> new EntityNotFoundException("No event with id: " + eventId));
+        UserEntity user = userRepository.findById(userId).orElseThrow(
+            () -> new EntityNotFoundException("No user with id: " + userId));
+
+        LocalDate currentDate = LocalDate.now();
+
+        int day = currentDate.getDayOfMonth();
+        int month = currentDate.getMonthValue();
+        int year = currentDate.getYear();
+
+        int numberOfPoints = user.getPoints();
+
+        ArrayList<Integer> reduceriDisponibile = new ArrayList<>();
+
+        if(event.getSoldTickets()<event.getTotalTickets()){
+
+            if(numberOfPoints>=50){
+                reduceriDisponibile.add(20);
+            }
+            if(numberOfPoints>=100){
+                reduceriDisponibile.add(50);
+            }
+            if(numberOfPoints>=200){
+                reduceriDisponibile.add(100);
+            }
+
+            if(reduceriDisponibile.contains(discount)){
+                if(discount == 20){
+                    user.setPoints(user.getPoints()-50);
+                    buyTicketWithDiscountedPrice(eventId, userId);
+                }
+                if(discount == 50){
+                    user.setPoints(user.getPoints()-100);
+                    buyTicketWithDiscountedPrice(eventId, userId);
+                }
+                if(discount == 100){
+                    user.setPoints(user.getPoints()-200);
+                    buyTicketWithDiscountedPrice(eventId, userId);
+                }
+            }else{
+                if(discount==20||discount==50||discount==100){
+                    throw new EntityNotFoundException("You don't have the required number of points in order to use this discount.");
+                }else{
+                    throw new EntityNotFoundException("This discount value is not available.")
+                }
+            }
+        }
+        
     }
     
 }

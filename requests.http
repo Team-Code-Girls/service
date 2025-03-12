@@ -199,5 +199,43 @@ GET http://localhost:8080/events/organizer/{{organizerId}}
 DELETE http://localhost:8080/events/{{eventId}}
 
 
-POST http://localhost:8080/tickets/buy/12345/2
+#REQUEST-URI PENTRU TESTAREA SISTEMULUI DE PUNCTE
 
+
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{
+    "id": "12345",
+    "name": "Eveniment test",
+    "organizerId": "5678",
+    "date": "2025-06-01",
+    "totalTickets": 100,
+    "soldTickets":0,
+    "location": "Bucharest",
+    "description": "Descriere eveniment test"
+}
+
+
+@postUserId2 = 3
+@postUserName2 = Anne Doe
+@postUserEmail2 = adoe@yahoo.com
+@postUserPhone2 = 0745773920
+@postUserPassword2 = password2
+@postUserAge2 = 25
+@postUserPoints2 = 0
+
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "id": "{{postUserId2}}",
+    "fullName": "{{postUserName2}}",
+    "email": "{{postUserEmail2}}",
+    "age": "{{postUserAge2}}",
+    "phoneNumber": "{{postUserPhone2}}",
+    "password": "{{postUserPassword2}}",
+    "points": "{{postUserPoints2}}"
+}
+
+POST http://localhost:8080/tickets/buy/12345/3
