@@ -27,6 +27,7 @@ public class TicketsService {
 
     @Autowired
     private UsersService usersService;
+    
 
     public Ticket saveTicket(Ticket ticket){
         TicketEntity entity = new TicketEntity();

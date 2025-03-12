@@ -9,6 +9,7 @@ import ro.unibuc.hello.data.TicketEntity;
 import ro.unibuc.hello.data.TicketRepository;
 import ro.unibuc.hello.dto.Ticket;
 import ro.unibuc.hello.service.TicketsService;
+import ro.unibuc.hello.service.BuyTicketService;
 
 import ro.unibuc.hello.exception.EntityNotFoundException;
 
@@ -22,6 +23,15 @@ public class TicketsController {
 
     @Autowired
     private TicketsService ticketsService;
+
+    @Autowired
+    private BuyTicketService buyTicketService;
+
+    @PostMapping("/tickets/buy/{eventId}/{userId}")
+    @ResponseBody
+    public void buyTicketRoute(@PathVariable String eventId, @PathVariable String userId){
+        buyTicketService.buyTicket(eventId, userId);
+    }
 
     @GetMapping("/tickets/{id}")
     @ResponseBody

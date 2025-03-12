@@ -43,7 +43,7 @@ public class BuyTicketService {
     @Autowired
     private EventService eventService;
 
-    public void BuyTicket(String eventId, String userId){
+    public void buyTicket(String eventId, String userId){
         EventEntity event = eventRepository.findById(eventId).orElseThrow(
             () -> new EntityNotFoundException("No event with id: " + eventId));
         UserEntity user = userRepository.findById(userId).orElseThrow(
@@ -54,7 +54,7 @@ public class BuyTicketService {
             List<Ticket> tickets = ticketService.getAllTickets();
             int idTicket = tickets.size();
             TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), userId, eventId, 1, 1, 2025);
-            ticketService.saveTicket(ticket);
+            ticketRepository.save(ticket);
         }else{
             throw new EntityNotFoundException("No tickets available for event: " + eventId);
         }

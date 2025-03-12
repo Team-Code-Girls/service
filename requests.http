@@ -198,3 +198,6 @@ GET http://localhost:8080/events/organizer/{{organizerId}}
 ### Delete an event by ID 
 DELETE http://localhost:8080/events/{{eventId}}
 
+
+POST http://localhost:8080/tickets/buy/12345/1
+
