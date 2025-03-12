@@ -6,10 +6,12 @@ import org.springframework.stereotype.Component;
 import ro.unibuc.hello.data.TicketEntity;
 import ro.unibuc.hello.dto.Ticket;
 import ro.unibuc.hello.service.UsersService;
+import ro.unibuc.hello.exception.NoTicketsFoundException;  
 
 import ro.unibuc.hello.data.TicketRepository;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,16 +64,31 @@ public class TicketsService {
         ticketsRepository.delete(ticket);
     }
 
-    public List<Map.Entry<String, Long>> getMostPopularEvents() {
+    public List<Map<String, Object>> getMostPopularEventsWithPercentage() {
+        long totalTickets = ticketsRepository.count();
+        if (totalTickets == 0) {
+            throw new NoTicketsFoundException("No tickets found in the database.");
+        }
         List<TicketEntity> tickets = ticketsRepository.findAll();
-        
         Map<String, Long> eventCount = tickets.stream()
                 .collect(Collectors.groupingBy(TicketEntity::getEventId, Collectors.counting()));
-
         return eventCount.entrySet().stream()
-                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .map(entry -> {
+                    String eventId = entry.getKey();
+                    long ticketCount = entry.getValue();
+                    double percentage = (ticketCount * 100.0) / totalTickets;
+
+                    Map<String, Object> eventData = new HashMap<>();
+                    eventData.put("eventId", eventId);
+                    eventData.put("count", ticketCount);
+                    eventData.put("percentage", String.format("%.2f%%", percentage)); 
+
+                    return eventData;
+                })
+                .sorted((e1, e2) -> Long.compare((long) e2.get("count"), (long) e1.get("count")))
                 .collect(Collectors.toList());
     }
+
     public Map<String, Long> getTicketCountByUserAgeRange() {
         List<TicketEntity> tickets = ticketsRepository.findAll();
         Map<String, Long> ageRangeTicketCount = new HashMap<>();
