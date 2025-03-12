@@ -29,6 +29,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class BuyTicketService {
 
@@ -48,12 +50,19 @@ public class BuyTicketService {
             () -> new EntityNotFoundException("No event with id: " + eventId));
         UserEntity user = userRepository.findById(userId).orElseThrow(
             () -> new EntityNotFoundException("No user with id: " + userId));
+
+        LocalDate currentDate = LocalDate.now();
+
+        int day = currentDate.getDayOfMonth();
+        int month = currentDate.getMonthValue();
+        int year = currentDate.getYear();
+
         if(event.getSoldTickets()<event.getTotalTickets()){
             event.setSoldTickets(event.getSoldTickets()+1);
             eventService.updateEvent(eventId, event);
             List<Ticket> tickets = ticketService.getAllTickets();
             int idTicket = tickets.size();
-            TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), eventId, userId, 1, 1, 2025);
+            TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), eventId, userId, day, month, year);
             ticketRepository.save(ticket);
         }else{
             throw new EntityNotFoundException("No tickets available for event: " + eventId);
