@@ -45,6 +45,8 @@ public class BuyTicketService {
     private TicketsService ticketService;
     @Autowired
     private EventService eventService;
+    @Autowired 
+    private UsersService usersService;
 
     public void buyTicket(String eventId, String userId){
 
@@ -87,6 +89,8 @@ public class BuyTicketService {
                 }
             }
             user.setPoints(user.getPoints()+numberOfPoints);
+            usersService.updateUser(userId, user);
+            
         }else{
             throw new EntityNotFoundException("No tickets available for event: " + eventId);
         }
@@ -116,7 +120,7 @@ public class BuyTicketService {
         }
     }
 
-    public buyTicketWithDiscount(String eventId, String userId, int discount){
+    public void buyTicketWithDiscount(String eventId, String userId, int discount){
 
         EventEntity event = eventRepository.findById(eventId).orElseThrow(
             () -> new EntityNotFoundException("No event with id: " + eventId));
@@ -148,21 +152,24 @@ public class BuyTicketService {
             if(reduceriDisponibile.contains(discount)){
                 if(discount == 20){
                     user.setPoints(user.getPoints()-50);
+                    usersService.updateUser(userId, user);
                     buyTicketWithDiscountedPrice(eventId, userId);
                 }
                 if(discount == 50){
                     user.setPoints(user.getPoints()-100);
+                    usersService.updateUser(userId, user);
                     buyTicketWithDiscountedPrice(eventId, userId);
                 }
                 if(discount == 100){
                     user.setPoints(user.getPoints()-200);
+                    usersService.updateUser(userId, user);
                     buyTicketWithDiscountedPrice(eventId, userId);
                 }
             }else{
                 if(discount==20||discount==50||discount==100){
                     throw new EntityNotFoundException("You don't have the required number of points in order to use this discount.");
                 }else{
-                    throw new EntityNotFoundException("This discount value is not available.")
+                    throw new EntityNotFoundException("This discount value is not available.");
                 }
             }
         }

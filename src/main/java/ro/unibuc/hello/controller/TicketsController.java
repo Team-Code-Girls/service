@@ -27,6 +27,12 @@ public class TicketsController {
     @Autowired
     private BuyTicketService buyTicketService;
 
+    @PostMapping("/tickets/buy/discount/{eventId}/{userId}/{discount}")
+    @ResponseBody
+    public void buyTicketWithDiscountRoute(@PathVariable String eventId, @PathVariable String userId, @PathVariable int discount){
+        buyTicketService.buyTicketWithDiscount(eventId, userId, discount);
+    }
+
     @PostMapping("/tickets/buy/{eventId}/{userId}")
     @ResponseBody
     public void buyTicketRoute(@PathVariable String eventId, @PathVariable String userId){

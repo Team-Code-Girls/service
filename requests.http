@@ -212,6 +212,7 @@ Content-Type: application/json
     "date": "2025-06-01",
     "totalTickets": 100,
     "soldTickets":0,
+    "ticketPrice": 50,
     "location": "Bucharest",
     "description": "Descriere eveniment test"
 }
@@ -239,3 +240,5 @@ Content-Type: application/json
 }
 
 POST http://localhost:8080/tickets/buy/12345/3
+
+POST http://localhost:8080/tickets/buy/discount/12345/3/20
