@@ -12,7 +12,8 @@ public class EventEntity {
     private String eventName;
     private String description;
     private String location;
-    private LocalDateTime dateTime;
+    private String date;
+    private String time;
     private int totalTickets;
     private int soldTickets;
     private int ticketPrice;
@@ -20,23 +21,25 @@ public class EventEntity {
 
     public EventEntity(){}
 
-    public EventEntity(String eventName, String description, String location, LocalDateTime dateTime, int totalTickets, int soldTickets, int ticketPrice, String organizerId){
+    public EventEntity(String eventName, String description, String location, String date, String time, int totalTickets, int soldTickets, int ticketPrice, String organizerId){
         this.eventName = eventName;
         this.description = description;
         this.location = location;
-        this.dateTime = dateTime;
+        this.date = date;
+        this.time = time;
         this.totalTickets = totalTickets;
         this.soldTickets = soldTickets;
         this.ticketPrice = ticketPrice;
         this.organizerId = organizerId;
     }
 
-    public EventEntity(String id, String eventName, String description, String location, LocalDateTime dateTime, int totalTickets, int soldTickets, int ticketPrice, String organizerId) {
+    public EventEntity(String id, String eventName, String description, String location, String date, String time, int totalTickets, int soldTickets, int ticketPrice, String organizerId) {
         this.id = id;
         this.eventName = eventName;
         this.description = description;
         this.location = location;
-        this.dateTime = dateTime;
+        this.date = date;
+        this.time = time;
         this.totalTickets = totalTickets;
         this.soldTickets = soldTickets;
         this.ticketPrice = ticketPrice;
@@ -55,8 +58,11 @@ public class EventEntity {
     public String getLocation() { return location; }
     public void setLocation(String location) { this.location = location; }
 
-    public LocalDateTime getDateTime() { return dateTime; }
-    public void setDateTime(LocalDateTime dateTime) { this.dateTime = dateTime; }
+    public String getDate() { return date; }
+    public void setDate(String date) { this.date = date; }
+
+    public String getTime() { return time; }
+    public void setTime(String time) { this.time = time; }
 
     public int getTotalTickets() { return totalTickets; }
     public void setTotalTickets(int totalTickets) { this.totalTickets = totalTickets; }
@@ -81,8 +87,8 @@ public class EventEntity {
     @Override
     public String toString() {
         String result = String.format(
-            "Event[id='%s', eventName='%s', location='%s', dateTime='%s', totalTickets=%d, soldTickets=%d, ticketPrice=%d, organizerId='%s']",
-            id, eventName, location, dateTime, totalTickets,soldTickets, ticketPrice, organizerId);
+            "Event[id='%s', eventName='%s', location='%s', date='%s', time='%s', totalTickets=%d, soldTickets=%d, ticketPrice=%d, organizerId='%s']",
+            id, eventName, location, date, time, totalTickets,soldTickets, ticketPrice, organizerId);
     
         if (description != null && !description.isEmpty()) {
             result += ", description= " + description;

@@ -3,36 +3,56 @@ POST http://localhost:8080/events
 Content-Type: application/json
 
 {
-    "id": "12345",
-    "name": "Eveniment test",
+    "id": "e01",
+    "eventName": "Eveniment anual.",
     "organizerId": "5678",
     "date": "2025-06-01",
+    "time": "18:00",
     "totalTickets": 100,
-    "soldTickets":90,
+    "soldTickets":10,
     "ticketPrice":50,
-    "location": "Bucharest",
-    "description": "Descriere eveniment test"
+    "location": "Bucuresti",
+    "description": "Descriere eveniment anual."
+}
+
+### Create second event
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{
+    "id": "e02",
+    "eventName": "Eveniment lunar.",
+    "organizerId": "5678",
+    "date": "2025-08-10",
+    "time": "19:00",
+    "totalTickets": 100,
+    "soldTickets":50,
+    "ticketPrice":20,
+    "location": "Iasi",
+    "description": "Descriere eveniment lunar."
 }
 
 ### Get all events
 GET http://localhost:8080/events
 
 ### Get event by ID 
-@eventId = 12345
+@eventId = e01
 GET http://localhost:8080/events/{{eventId}}
+
 
 ### Update an existing event 
 PUT http://localhost:8080/events/{{eventId}}
 Content-Type: application/json
 
 {
-    "name": "Updated Eveniment",
+    "eventName": "Update eveniment anual.",
     "organizerId": "5678",
     "date": "2025-06-02",
     "totalTickets":100,
     "soldTickets":90,
-    "location": "Cluj-Napoca",
-    "description": "Descriere update."
+    "ticketPrice":50,
+    "location": "Bucuresti",
+    "description": "Update descriere eveniment anual."
 }
 
 
@@ -45,6 +65,7 @@ GET http://localhost:8080/events/eventName/{{eventName}}
 GET http://localhost:8080/events/organizer/{{organizerId}}
 
 ### Delete an event by ID 
+
 DELETE http://localhost:8080/events/{{eventId}}
 
 ### Create a new user

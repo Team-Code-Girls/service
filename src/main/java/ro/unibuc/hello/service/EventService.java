@@ -30,12 +30,22 @@ public class EventService {
                 .orElseThrow( () -> new EntityNotFoundException("Event with id:" +id+" not found."));
     }
 
+    public int dynamicPrice(String id){
+        EventEntity event = event.getEventById(id);
+        int price = event.getTicketPrice();
+        if( event.getSoldTickets() > (int)( 0.8*event.getTotalTickets() )){
+            price = (int)(price*1.2);         
+        }
+        return price;
+    }
+
     public EventEntity updateEvent(String id, EventEntity updatedEvent){
         if(!eventRepository.existsById(id)){
             throw new EntityNotFoundException("No event with id: "+ id);
         }
         updatedEvent.setId(id);
-        return eventRepository.save(updatedEvent);
+        eventRepository.save(updatedEvent);
+        return updatedEvent;
     }
 
     public void deleteEvent(String id){
