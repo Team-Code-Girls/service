@@ -53,7 +53,7 @@ public class BuyTicketService {
             eventService.updateEvent(eventId, event);
             List<Ticket> tickets = ticketService.getAllTickets();
             int idTicket = tickets.size();
-            TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), userId, eventId, 1, 1, 2025);
+            TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), eventId, userId, 1, 1, 2025);
             ticketRepository.save(ticket);
         }else{
             throw new EntityNotFoundException("No tickets available for event: " + eventId);

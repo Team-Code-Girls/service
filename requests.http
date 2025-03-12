@@ -123,7 +123,7 @@ Content-Type: application/json
 {
     "id": "1",
     "userId": "1",
-    "eventId": "1",
+    "eventId": "12345",
     "day": 1,
     "month": 10,
     "year": 2025
@@ -199,5 +199,5 @@ GET http://localhost:8080/events/organizer/{{organizerId}}
 DELETE http://localhost:8080/events/{{eventId}}
 
 
-POST http://localhost:8080/tickets/buy/12345/1
+POST http://localhost:8080/tickets/buy/12345/2
 
