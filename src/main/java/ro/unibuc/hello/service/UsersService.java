@@ -24,6 +24,7 @@ public class UsersService {
         userDTO.setEmail(userEntity.getEmail());
         userDTO.setFullName(userEntity.getFullName());
         userDTO.setAge(userEntity.getAge());
+        userDTO.setPoints(userEntity.getPoints());
         return userDTO;
     }
 
