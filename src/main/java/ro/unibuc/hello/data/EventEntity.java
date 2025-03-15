@@ -71,13 +71,7 @@ public class EventEntity {
     public void setSoldTickets(int soldTickets) { this.soldTickets = soldTickets; }
 
     public int getTicketPrice() { 
-        int availableTickets = totalTickets - soldTickets;
-
-        if (availableTickets < 0.8 * totalTickets){
-            ticketPrice = (int) (ticketPrice* 1.2);
-        }
-        return ticketPrice;
-    
+        return ticketPrice;   
     }
     public void setTicketPrice(int ticketPrice){this.ticketPrice = ticketPrice;}
 

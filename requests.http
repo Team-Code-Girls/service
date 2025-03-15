@@ -4,15 +4,15 @@ Content-Type: application/json
 
 {
     "id": "e01",
-    "eventName": "Eveniment anual.",
+    "eventName": "Eveniment 1",
     "organizerId": "5678",
     "date": "2025-06-01",
     "time": "18:00",
-    "totalTickets": 100,
+    "totalTickets": 50,
     "soldTickets":10,
     "ticketPrice":50,
     "location": "Bucuresti",
-    "description": "Descriere eveniment anual."
+    "description": "Descriere eveniment 1"
 }
 
 ### Create second event
@@ -48,8 +48,8 @@ Content-Type: application/json
     "eventName": "Update eveniment anual.",
     "organizerId": "5678",
     "date": "2025-06-02",
-    "totalTickets":100,
-    "soldTickets":90,
+    "totalTickets":50,
+    "soldTickets":41,
     "ticketPrice":50,
     "location": "Bucuresti",
     "description": "Update descriere eveniment anual."
@@ -57,7 +57,7 @@ Content-Type: application/json
 
 
 ### Get event by event name 
-@eventName = Updated Eveniment
+@eventName = Eveniment 2
 GET http://localhost:8080/events/eventName/{{eventName}}
 
 ### Get events by organizer ID 
@@ -65,7 +65,6 @@ GET http://localhost:8080/events/eventName/{{eventName}}
 GET http://localhost:8080/events/organizer/{{organizerId}}
 
 ### Delete an event by ID 
-
 DELETE http://localhost:8080/events/{{eventId}}
 
 ### Create a new user
@@ -211,8 +210,8 @@ GET http://localhost:8080/tickets/popular-events
 GET http://localhost:8080/tickets/age-stats
 
 ### Get event by event name 
-@eventName = Updated Eveniment
-GET http://localhost:8080/events/eventName/{{eventName}}
+#@eventName = Updated Eveniment
+#GET http://localhost:8080/events/eventName/{{eventName}}
 
 ### Get events by organizer ID 
 @organizerId = 5678

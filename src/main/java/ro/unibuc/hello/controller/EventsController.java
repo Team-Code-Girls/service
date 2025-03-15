@@ -14,12 +14,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @RestController
 public class EventsController {
     
     @Autowired
     private EventService eventsService;
+
 
     @PostMapping("/events")
     public EventEntity createEvent(@RequestBody EventEntity event) {
@@ -50,15 +54,16 @@ public class EventsController {
         
     }
 
-    @GetMapping("/eventName/{eventName}")
+    @GetMapping("/events/eventName/{eventName}")
     public EventEntity getEventByEventName(@PathVariable String eventName) {
         return eventsService.getEventByEventName(eventName);
       
     }
     
 
-    @GetMapping("/organizer/{organizerId}")
+    @GetMapping("/events/organizer/{organizerId}")
     public List<EventEntity> getEventsByOrganizerId(@PathVariable String organizerId) {
+
         return eventsService.getEventsByOrganizerId(organizerId);
 
     }
