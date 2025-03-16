@@ -15,6 +15,10 @@ Content-Type: application/json
     "description": "Descriere eveniment 1"
 }
 
+### Add discount 
+@eventId = e01
+PUT http://localhost:8080/events/discount/{{eventId}}
+
 ### Create second event
 POST http://localhost:8080/events
 Content-Type: application/json

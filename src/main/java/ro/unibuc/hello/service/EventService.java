@@ -10,6 +10,10 @@ import ro.unibuc.hello.exception.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+
 
 @Service
 public class EventService {
@@ -30,12 +34,34 @@ public class EventService {
                 .orElseThrow( () -> new EntityNotFoundException("Event with id:" +id+" not found."));
     }
 
-    public int dynamicPrice(EventEntity event){
+
+    //TO DO: conditii - sa nu se aplice in ziua event-ului
+    //       de adaugat apel in BuyTicketService
+    public void checkSales(EventEntity event){
         // scumpire bilet 20%, dupa 80% bilete vandute
-        if( event.getSoldTickets() == (int)( 0.8*event.getTotalTickets() )){
-            return  (int)(event.getTicketPrice()*1.2);         
+       
+        if( (event.getSoldTickets() == (int)( 0.8*event.getTotalTickets() )) && (!"discount".equals(event.getPriceOperation()))){
+            int increasedPrice =  (int)(event.getTicketPrice()*1.2);   
+            event.setTicketPrice(increasedPrice);
+            event.setPriceOperation("increase");
+            eventRepository.save(event);      
         }
-        return event.getTicketPrice();
+        
+    }
+
+    public EventEntity addDiscount(String id){
+        EventEntity event = eventRepository.findById(id)
+                            .orElseThrow( () -> new EntityNotFoundException("No event with id:"+ id));        
+        LocalDate currentDate = LocalDate.now();
+        LocalDate eventDate = event.getDate();
+        Long daysBetween = ChronoUnit.DAYS.between(currentDate, eventDate);
+        if( (daysBetween >= 0) && (daysBetween <= 3) && (event.getSoldTickets() <= event.getTotalTickets()/2)){
+            int discountPrice = (int) (event.getTicketPrice()*0.8);
+            event.setTicketPrice(discountPrice);
+            event.setPriceOperation("discount");
+            eventRepository.save(event);
+        }  
+        return event;      
     }
 
     public EventEntity updateEvent(String id, EventEntity updatedEvent){
@@ -43,7 +69,6 @@ public class EventService {
             throw new EntityNotFoundException("No event with id: "+ id);
         }
         updatedEvent.setId(id);
-        updatedEvent.setTicketPrice(dynamicPrice(updatedEvent));
         eventRepository.save(updatedEvent);
         return updatedEvent;
     }
