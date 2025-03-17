@@ -57,7 +57,7 @@ public class TicketsController {
 
     @GetMapping("/tickets/age-stats")
     @ResponseBody
-    public Map<String, Long> getTicketCountByAgeRange() {
-        return ticketsService.getTicketCountByUserAgeRange();
+    public Map<String, String> getTicketCountByAgeRange() {
+        return ticketsService.getMostPopularEventByAgeRange();
     }
 }
