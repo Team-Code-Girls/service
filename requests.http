@@ -16,7 +16,7 @@ Content-Type: application/json
 }
 
 ### Add discount 
-@eventIdE = ediscount
+@eventIdE = enormal
 PUT http://localhost:8080/events/discount/{{eventIdE}}
 
 ### Increase price on event day
@@ -27,17 +27,20 @@ POST http://localhost:8080/events
 Content-Type: application/json
 
 {
-    "id": "enormal",
-    "eventName": "Eveniment normal",
+    "id": "eincrease",
+    "eventName": "Eveniment increase",
     "organizerId": "5678",
     "date": "2025-03-17",
     "time": "19:00",
     "totalTickets": 100,
-    "soldTickets":40,
-    "ticketPrice":20,
+    "soldTickets":80,
+    "ticketPrice":50,
     "location": "Iasi",
     "description": "Descriere eveniment 2"
 }
+@IdEventN = enormal
+### Increase price on event day
+PUT http://localhost:8080/events/eventDayPrice/{{IdEventN}}
 
 ### Get all events
 GET http://localhost:8080/events
@@ -48,15 +51,16 @@ GET http://localhost:8080/events/{{eventIdE}}
 
 
 ### Update an existing event 
-PUT http://localhost:8080/events/{{eventId}}
+@IdEventI= eincrease
+PUT http://localhost:8080/events/{{IdEventI}}
 Content-Type: application/json
 
 {
-    "eventName": "Update eveniment anual.",
+    "eventName": "Eveniment increase",
     "organizerId": "5678",
-    "date": "2025-06-02",
-    "totalTickets":50,
-    "soldTickets":41,
+    "date": "2025-03-17",
+    "totalTickets":100,
+    "soldTickets":90,
     "ticketPrice":50,
     "location": "Bucuresti",
     "description": "Update descriere eveniment anual."
@@ -64,8 +68,8 @@ Content-Type: application/json
 
 
 ### Get event by event name 
-@eventName = Eveniment 1
-GET http://localhost:8080/events/eventName/{{eventName}}
+@eventNameI = Eveniment increase
+GET http://localhost:8080/events/eventName/{{eventNameI}}
 
 ### Get events by organizer ID 
 @organizerId = 5678

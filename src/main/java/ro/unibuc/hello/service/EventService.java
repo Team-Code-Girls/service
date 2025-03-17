@@ -42,8 +42,12 @@ public class EventService {
     //       de adaugat apel in BuyTicketService
     public void checkSales(EventEntity event){
         // scumpire bilet 20%, dupa 80% bilete vandute
-       
-        if( (event.getSoldTickets() == (int)( 0.8*event.getTotalTickets() )) && (!"discount".equals(event.getPriceOperation()))){
+
+        LocalDate currentDate = LocalDate.now();
+        LocalDate eventDate = event.getDate();
+        if( (event.getSoldTickets() == (int)( 0.8*event.getTotalTickets() )) && (!"discount".equals(event.getPriceOperation()))
+             && (!eventDate.equals(currentDate))){
+
             int increasedPrice =  (int)(event.getTicketPrice()*1.2);   
             event.setTicketPrice(increasedPrice);
             event.setPriceOperation("increase");
@@ -76,13 +80,14 @@ public class EventService {
         int ticketPrice = event.getTicketPrice();
         int newPrice = ticketPrice; //default
 
-        if((currentDate.equals(eventDate)) && (!"discount".equals(event.getPriceOperation())) ){
+        if((currentDate.equals(eventDate)) && (!"discount".equals(event.getPriceOperation())) && (!"eventDayIncrease".equals(event.getPriceOperation())) ){
             if("increase".equals(event.getPriceOperation())){
                 newPrice = (int) Math.round(ticketPrice * 1.1);         
             }
             else{
                 newPrice = (int) Math.round(ticketPrice * 1.3);
             }
+            event.setPriceOperation("eventDayIncrease");
             event.setTicketPrice(newPrice);
             eventRepository.save(event);
             return event;

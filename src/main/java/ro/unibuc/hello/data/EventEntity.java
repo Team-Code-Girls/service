@@ -21,7 +21,7 @@ public class EventEntity {
     private int ticketPrice;
     private String organizerId;
     @JsonIgnore
-    private String priceOperation = "none"; // putem avea "discount", "increase"
+    private String priceOperation = "none"; // putem avea "discount", "increase", "eventDayIncrease"
 
     public EventEntity(){}
 
@@ -85,6 +85,7 @@ public class EventEntity {
 
     public String getPriceOperation() {return priceOperation;}
     public void setPriceOperation(String priceOperation){ this.priceOperation = priceOperation;}
+    
 
     @Override
     public String toString() {
