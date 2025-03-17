@@ -48,6 +48,11 @@ public class EventsController {
         return eventsService.addDiscount(id);
     }
 
+    @PutMapping("/events/eventDayPrice/{id}")
+    public EventEntity increasePriceOnEventDay(@PathVariable String id){
+        return eventsService.increasePriceOnEventDay(id);
+    }
+
     @PutMapping("/events/{id}")
     public EventEntity updateEvent(@PathVariable String id, @RequestBody EventEntity event) {
         return eventsService.updateEvent(id, event);

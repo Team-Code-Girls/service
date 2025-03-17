@@ -3,10 +3,10 @@ POST http://localhost:8080/events
 Content-Type: application/json
 
 {
-    "id": "e01",
-    "eventName": "Eveniment 1",
+    "id": "ediscount",
+    "eventName": "Eveniment cu discount ",
     "organizerId": "5678",
-    "date": "2025-06-01",
+    "date": "2025-03-17",
     "time": "18:00",
     "totalTickets": 50,
     "soldTickets":10,
@@ -16,24 +16,27 @@ Content-Type: application/json
 }
 
 ### Add discount 
-@eventId = e01
-PUT http://localhost:8080/events/discount/{{eventId}}
+@eventIdE = ediscount
+PUT http://localhost:8080/events/discount/{{eventIdE}}
+
+### Increase price on event day
+PUT http://localhost:8080/events/eventDayPrice/{{eventIdE}}
 
 ### Create second event
 POST http://localhost:8080/events
 Content-Type: application/json
 
 {
-    "id": "e02",
-    "eventName": "Eveniment lunar.",
+    "id": "enormal",
+    "eventName": "Eveniment normal",
     "organizerId": "5678",
-    "date": "2025-08-10",
+    "date": "2025-03-17",
     "time": "19:00",
     "totalTickets": 100,
-    "soldTickets":50,
+    "soldTickets":40,
     "ticketPrice":20,
     "location": "Iasi",
-    "description": "Descriere eveniment lunar."
+    "description": "Descriere eveniment 2"
 }
 
 ### Get all events
@@ -41,7 +44,7 @@ GET http://localhost:8080/events
 
 ### Get event by ID 
 @eventId = e01
-GET http://localhost:8080/events/{{eventId}}
+GET http://localhost:8080/events/{{eventIdE}}
 
 
 ### Update an existing event 
@@ -61,7 +64,7 @@ Content-Type: application/json
 
 
 ### Get event by event name 
-@eventName = Eveniment 2
+@eventName = Eveniment 1
 GET http://localhost:8080/events/eventName/{{eventName}}
 
 ### Get events by organizer ID 
@@ -69,7 +72,7 @@ GET http://localhost:8080/events/eventName/{{eventName}}
 GET http://localhost:8080/events/organizer/{{organizerId}}
 
 ### Delete an event by ID 
-DELETE http://localhost:8080/events/{{eventId}}
+DELETE http://localhost:8080/events/{{eventIdE}}
 
 ### Create a new user
 @postUserId = 1

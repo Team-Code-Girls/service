@@ -3,6 +3,9 @@ package ro.unibuc.hello.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.events.EventException;
+
 import ro.unibuc.hello.data.EventEntity;
 import ro.unibuc.hello.data.EventRepository;
 import ro.unibuc.hello.exception.EntityNotFoundException;
@@ -64,6 +67,29 @@ public class EventService {
         return event;      
     }
 
+    public EventEntity increasePriceOnEventDay(String id){
+        EventEntity event = eventRepository.findById(id)
+                .orElseThrow ( ()-> new EntityNotFoundException("No event with id"+ id));
+
+        LocalDate currentDate = LocalDate.now();
+        LocalDate eventDate = event.getDate();
+        int ticketPrice = event.getTicketPrice();
+        int newPrice = ticketPrice; //default
+
+        if((currentDate.equals(eventDate)) && (!"discount".equals(event.getPriceOperation())) ){
+            if("increase".equals(event.getPriceOperation())){
+                newPrice = (int) Math.round(ticketPrice * 1.1);         
+            }
+            else{
+                newPrice = (int) Math.round(ticketPrice * 1.3);
+            }
+            event.setTicketPrice(newPrice);
+            eventRepository.save(event);
+            return event;
+        }
+        return event;
+    }
+
     public EventEntity updateEvent(String id, EventEntity updatedEvent){
         if(!eventRepository.existsById(id)){
             throw new EntityNotFoundException("No event with id: "+ id);
@@ -73,11 +99,12 @@ public class EventService {
         return updatedEvent;
     }
 
+    @Transactional
     public void deleteEvent(String id){
-        if (!eventRepository.existsById(id)){
-            throw new EntityNotFoundException("Event with id:" +id+" not found.");
-            
-        }
+        EventEntity event =  eventRepository.findById(id)
+            .orElseThrow( () -> new EntityNotFoundException("Event with id:" +id+" not found."));       
+        
+        eventRepository.delete(event);
     }
 
     public EventEntity getEventByEventName(String eventName){
