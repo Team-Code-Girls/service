@@ -4,12 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ro.unibuc.hello.data.TicketEntity;
+import ro.unibuc.hello.data.EventEntity;
 import ro.unibuc.hello.dto.Ticket;
 import ro.unibuc.hello.service.UsersService;
+import ro.unibuc.hello.exception.NoTicketsFoundException;  
+import ro.unibuc.hello.exception.NoEventsFoundException;
 
 import ro.unibuc.hello.data.TicketRepository;
+import ro.unibuc.hello.data.EventRepository;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +29,9 @@ public class TicketsService {
 
     @Autowired
     private TicketRepository ticketsRepository;
+
+    @Autowired
+    private EventRepository eventRepository;
 
     @Autowired
     private UsersService usersService;
@@ -62,29 +70,66 @@ public class TicketsService {
         ticketsRepository.delete(ticket);
     }
 
-    public List<Map.Entry<String, Long>> getMostPopularEvents() {
+    public List<Map<String, Object>> getMostPopularEventsWithPercentage() {
+        long totalTickets = ticketsRepository.count();
+        if (totalTickets == 0) {
+            throw new NoTicketsFoundException("No tickets found in the database.");
+        }
         List<TicketEntity> tickets = ticketsRepository.findAll();
-        
         Map<String, Long> eventCount = tickets.stream()
                 .collect(Collectors.groupingBy(TicketEntity::getEventId, Collectors.counting()));
-
+    
         return eventCount.entrySet().stream()
-                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .map(entry -> {
+                    String eventId = entry.getKey();
+                    long ticketCount = entry.getValue();
+                    double percentage = (ticketCount * 100.0) / totalTickets;
+    
+                    String eventName = eventRepository.findById(eventId)
+                        .map(event -> event.geteventName())
+                        .orElseThrow(() -> new NoEventsFoundException("Event with ID " + eventId + " not found."));
+    
+                    Map<String, Object> eventData = new HashMap<>();
+                    eventData.put("percentage", String.format("%.2f%%", percentage));
+                    eventData.put("eventName", eventName);
+    
+                    return eventData;
+                })
+                .sorted((e1, e2) -> Long.compare((long) e2.get("count"), (long) e1.get("count")))
                 .collect(Collectors.toList());
     }
-    public Map<String, Long> getTicketCountByUserAgeRange() {
-        List<TicketEntity> tickets = ticketsRepository.findAll();
-        Map<String, Long> ageRangeTicketCount = new HashMap<>();
     
+
+    public Map<String, String> getMostPopularEventByAgeRange() {
+        List<TicketEntity> tickets = ticketsRepository.findAll();
+        if (tickets.isEmpty()) {
+            throw new NoTicketsFoundException("No tickets found in the database.");
+        }
+        Map<String, Map<String, Long>> ageRangeEventCount = new HashMap<>();
         for (TicketEntity ticket : tickets) {
             usersService.getUserById(ticket.getUserId()).ifPresent(user -> {
                 int age = user.getAge();
-                String ageRange = getAgeRange(age); 
-                ageRangeTicketCount.put(ageRange, ageRangeTicketCount.getOrDefault(ageRange, 0L) + 1);
+                String ageRange = getAgeRange(age);
+                ageRangeEventCount.putIfAbsent(ageRange, new HashMap<>());
+                Map<String, Long> eventCount = ageRangeEventCount.get(ageRange);
+                eventCount.put(ticket.getEventId(), eventCount.getOrDefault(ticket.getEventId(), 0L) + 1);
             });
         }
+        Map<String, String> result = new HashMap<>();
+        for (String ageRange : ageRangeEventCount.keySet()) {
+            Map<String, Long> eventCount = ageRangeEventCount.get(ageRange);
+            String mostPopularEventId = eventCount.entrySet().stream()
+                    .max(Map.Entry.comparingByValue())
+                    .map(Map.Entry::getKey)
+                    .orElse("Unknown Event");
     
-        return ageRangeTicketCount;
+            String eventName = eventRepository.findById(mostPopularEventId)
+                    .map(EventEntity::geteventName)
+                    .orElseThrow(() -> new NoEventsFoundException("Event with ID " + mostPopularEventId + " not found."));
+    
+            result.put(ageRange, eventName);
+        }
+        return result;
     }
     
     private String getAgeRange(int age) {

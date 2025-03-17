@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
     "id": "12345",
-    "name": "Eveniment test",
+    "eventName": "Eveniment test",
     "organizerId": "5678",
     "date": "2025-06-01",
     "totalTickets": 100,
@@ -159,7 +159,7 @@ Content-Type: application/json
 {
     "id": "4",
     "userId": "2",
-    "eventId": "2",
+    "eventId": "12345",
     "day": 22,
     "month": 9,
     "year": 2025
