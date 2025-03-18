@@ -3,72 +3,70 @@ POST http://localhost:8080/events
 Content-Type: application/json
 
 {
-    "id": "ediscount",
-    "eventName": "Eveniment cu discount ",
+    "id": "evNormal",
+    "eventName": "Eveniment 1",
     "organizerId": "5678",
-    "date": "2025-03-17",
-    "time": "18:00",
-    "totalTickets": 50,
-    "soldTickets":10,
+    "date": "2025-03-19",
+    "time": "19:00",
+    "totalTickets": 100,
+    "soldTickets":78,
     "ticketPrice":50,
-    "location": "Bucuresti",
+    "location": "Iasi",
     "description": "Descriere eveniment 1"
 }
 
-### Add discount 
-@eventIdE = enormal
-PUT http://localhost:8080/events/discount/{{eventIdE}}
 
 ### Increase price on event day
-PUT http://localhost:8080/events/eventDayPrice/{{eventIdE}}
+@IdEventN = evNormal
+PUT http://localhost:8080/events/eventDayPrice/{{IdEventN}}
+
 
 ### Create second event
 POST http://localhost:8080/events
 Content-Type: application/json
 
 {
-    "id": "eincrease",
-    "eventName": "Eveniment increase",
+    "id": "evIncrease",
+    "eventName": "Eveniment 2",
     "organizerId": "5678",
-    "date": "2025-03-17",
+    "date": "2025-03-19",
     "time": "19:00",
     "totalTickets": 100,
-    "soldTickets":80,
+    "soldTickets":78,
     "ticketPrice":50,
-    "location": "Iasi",
+    "location": "Bucuresti",
     "description": "Descriere eveniment 2"
 }
-@IdEventN = enormal
-### Increase price on event day
-PUT http://localhost:8080/events/eventDayPrice/{{IdEventN}}
 
 ### Get all events
 GET http://localhost:8080/events
 
 ### Get event by ID 
-@eventId = e01
-GET http://localhost:8080/events/{{eventIdE}}
+@eventId = evNormal
+GET http://localhost:8080/events/{{eventId}}
 
 
 ### Update an existing event 
-@IdEventI= eincrease
-PUT http://localhost:8080/events/{{IdEventI}}
+
+PUT http://localhost:8080/events/{{IdEventN}}
 Content-Type: application/json
 
 {
-    "eventName": "Eveniment increase",
+    "eventName": "Eveniment 1",
     "organizerId": "5678",
-    "date": "2025-03-17",
+    "date": "2025-03-20",
     "totalTickets":100,
-    "soldTickets":90,
+    "soldTickets":50,
     "ticketPrice":50,
     "location": "Bucuresti",
-    "description": "Update descriere eveniment anual."
+    "description": "Update descriere eveniment 1."
 }
 
+### Get discount for unsold events (minimum 50% unsold tickets)
+PUT http://localhost:8080/events/discount/{{IdEventN}}
 
 ### Get event by event name 
-@eventNameI = Eveniment increase
+@eventNameI = Eveniment 2
 GET http://localhost:8080/events/eventName/{{eventNameI}}
 
 ### Get events by organizer ID 
@@ -76,7 +74,7 @@ GET http://localhost:8080/events/eventName/{{eventNameI}}
 GET http://localhost:8080/events/organizer/{{organizerId}}
 
 ### Delete an event by ID 
-DELETE http://localhost:8080/events/{{eventIdE}}
+DELETE http://localhost:8080/events/{{eventId}}
 
 ### Create a new user
 @postUserId = 1
@@ -155,7 +153,7 @@ Content-Type: application/json
 {
     "id": "1",
     "userId": "1",
-    "eventId": "1",
+    "eventId": "12345",
     "day": 1,
     "month": 10,
     "year": 2025
@@ -191,7 +189,7 @@ Content-Type: application/json
 {
     "id": "4",
     "userId": "2",
-    "eventId": "2",
+    "eventId": "12345",
     "day": 22,
     "month": 9,
     "year": 2025
@@ -230,3 +228,64 @@ GET http://localhost:8080/events/organizer/{{organizerId}}
 ### Delete an event by ID 
 DELETE http://localhost:8080/events/{{eventId}}
 
+
+#REQUEST-URI PENTRU TESTAREA SISTEMULUI DE PUNCTE
+
+
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{
+    "id": "12345",
+    "name": "Eveniment test",
+    "organizerId": "5678",
+    "date": "2025-06-01",
+    "totalTickets": 100,
+    "soldTickets":0,
+    "ticketPrice": 50,
+    "location": "Bucharest",
+    "description": "Descriere eveniment test"
+}
+
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{
+    "id": "123456",
+    "name": "Eveniment test",
+    "organizerId": "5678",
+    "date": "2025-06-01",
+    "totalTickets": 100,
+    "soldTickets":0,
+    "ticketPrice": 300,
+    "location": "Bucharest",
+    "description": "Descriere eveniment test"
+}
+
+
+
+
+@postUserId2 = 3
+@postUserName2 = Anne Doe
+@postUserEmail2 = adoe@yahoo.com
+@postUserPhone2 = 0745773920
+@postUserPassword2 = password2
+@postUserAge2 = 25
+@postUserPoints2 = 0
+
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "id": "{{postUserId2}}",
+    "fullName": "{{postUserName2}}",
+    "email": "{{postUserEmail2}}",
+    "age": "{{postUserAge2}}",
+    "phoneNumber": "{{postUserPhone2}}",
+    "password": "{{postUserPassword2}}",
+    "points": "{{postUserPoints2}}"
+}
+
+POST http://localhost:8080/tickets/buy/evIncrease/3
+
+POST http://localhost:8080/tickets/buy/discount/12345/3/100

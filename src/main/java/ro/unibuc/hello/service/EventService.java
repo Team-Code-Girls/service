@@ -38,11 +38,7 @@ public class EventService {
     }
 
 
-    //TO DO: conditii - sa nu se aplice in ziua event-ului
-    //       de adaugat apel in BuyTicketService
     public void checkSales(EventEntity event){
-        // scumpire bilet 20%, dupa 80% bilete vandute
-
         LocalDate currentDate = LocalDate.now();
         LocalDate eventDate = event.getDate();
         if( (event.getSoldTickets() == (int)( 0.8*event.getTotalTickets() )) && (!"discount".equals(event.getPriceOperation()))
@@ -62,7 +58,8 @@ public class EventService {
         LocalDate currentDate = LocalDate.now();
         LocalDate eventDate = event.getDate();
         Long daysBetween = ChronoUnit.DAYS.between(currentDate, eventDate);
-        if( (daysBetween >= 0) && (daysBetween <= 3) && (event.getSoldTickets() <= event.getTotalTickets()/2)){
+        if( (daysBetween >= 0) && (daysBetween <= 3) && (event.getSoldTickets() <= event.getTotalTickets()/2)
+            && (!"discount".equals(event.getPriceOperation())) ){
             int discountPrice = (int) (event.getTicketPrice()*0.8);
             event.setTicketPrice(discountPrice);
             event.setPriceOperation("discount");

@@ -8,16 +8,18 @@ public class Ticket {
     private int day;
     private int month;
     private int year;
+    private int price;
 
     public Ticket() {}
     
-    public Ticket(String id, String userId, String eventId, int day, int month, int year){
+    public Ticket(String id, String userId, String eventId, int day, int month, int year, int price){
         this.id = id;
         this.userId = userId;
         this.eventId = eventId;
         this.day = day;
         this.month = month;
         this.year = year;
+        this.price = price;
     }
 
     public void setId(String id) {
@@ -44,6 +46,10 @@ public class Ticket {
         this.year = year;
     }
 
+    public void setPrice(int price){
+        this.price = price;
+    }
+
     public String getId() {
         return id;
     }
@@ -66,5 +72,9 @@ public class Ticket {
     
     public int getYear() {
         return year;
+    }
+
+    public int getPrice(){
+        return price;
     }
 }

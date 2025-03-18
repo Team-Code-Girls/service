@@ -15,25 +15,28 @@ public class TicketEntity {
     private int day;
     private int month;
     private int year;
-
+    //Pretul cu care a fost vandut un bilet
+    private int price;
 
     public TicketEntity() {}
 
-    public TicketEntity(String eventId, String userId, int day, int month, int year) {
+    public TicketEntity(String eventId, String userId, int day, int month, int year, int price) {
         this.eventId = eventId;
         this.userId = userId;
         this.day = day;
         this.month = month;
         this.year = year;
+        this.price = price;
     }
 
-    public TicketEntity(String id, String eventId, String userId, int day, int month, int year){
+    public TicketEntity(String id, String eventId, String userId, int day, int month, int year, int price){
         this.id = id;
         this.eventId = eventId;
         this.userId = userId;
         this.day = day;
         this.month = month;
         this.year = year;
+        this.price = price;
     }
 
 
@@ -80,6 +83,13 @@ public class TicketEntity {
     }
     public void setYear(int year){
         this.year = year;
+    }
+
+    public int getPrice(){
+        return price;
+    }
+    public void setPrice(int price){
+        this.price = price;
     }
 
 
