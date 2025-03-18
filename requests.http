@@ -217,6 +217,23 @@ Content-Type: application/json
     "description": "Descriere eveniment test"
 }
 
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{
+    "id": "123456",
+    "name": "Eveniment test",
+    "organizerId": "5678",
+    "date": "2025-06-01",
+    "totalTickets": 100,
+    "soldTickets":0,
+    "ticketPrice": 300,
+    "location": "Bucharest",
+    "description": "Descriere eveniment test"
+}
+
+
+
 
 @postUserId2 = 3
 @postUserName2 = Anne Doe
@@ -239,6 +256,6 @@ Content-Type: application/json
     "points": "{{postUserPoints2}}"
 }
 
-POST http://localhost:8080/tickets/buy/12345/3
+POST http://localhost:8080/tickets/buy/123456/3
 
-POST http://localhost:8080/tickets/buy/discount/12345/3/20
+POST http://localhost:8080/tickets/buy/discount/12345/3/100

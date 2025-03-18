@@ -61,12 +61,14 @@ public class BuyTicketService {
         int month = currentDate.getMonthValue();
         int year = currentDate.getYear();
 
+        int price = event.getTicketPrice();
+
         if(event.getSoldTickets()<event.getTotalTickets()){
             event.setSoldTickets(event.getSoldTickets()+1);
             eventService.updateEvent(eventId, event);
             List<Ticket> tickets = ticketService.getAllTickets();
             int idTicket = tickets.size();
-            TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), eventId, userId, day, month, year);
+            TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), eventId, userId, day, month, year, price);
             ticketRepository.save(ticket);
             int priceTicket = event.getTicketPrice();
             int numberOfPoints = 0;
@@ -96,7 +98,7 @@ public class BuyTicketService {
         }
     }
 
-    public void buyTicketWithDiscountedPrice(String eventId, String userId){
+    public void buyTicketWithDiscountedPrice(String eventId, String userId, int discount){
         EventEntity event = eventRepository.findById(eventId).orElseThrow(
             () -> new EntityNotFoundException("No event with id: " + eventId));
         UserEntity user = userRepository.findById(userId).orElseThrow(
@@ -108,12 +110,14 @@ public class BuyTicketService {
         int month = currentDate.getMonthValue();
         int year = currentDate.getYear();
 
+        int price = event.getTicketPrice() - (event.getTicketPrice()*discount)/100;
+
         if(event.getSoldTickets()<event.getTotalTickets()){
             event.setSoldTickets(event.getSoldTickets()+1);
             eventService.updateEvent(eventId, event);
             List<Ticket> tickets = ticketService.getAllTickets();
             int idTicket = tickets.size();
-            TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), eventId, userId, day, month, year);
+            TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), eventId, userId, day, month, year, price);
             ticketRepository.save(ticket);
         }else{
             throw new EntityNotFoundException("No tickets available for event: " + eventId);
@@ -153,17 +157,17 @@ public class BuyTicketService {
                 if(discount == 20){
                     user.setPoints(user.getPoints()-50);
                     usersService.updateUser(userId, user);
-                    buyTicketWithDiscountedPrice(eventId, userId);
+                    buyTicketWithDiscountedPrice(eventId, userId, discount);
                 }
                 if(discount == 50){
                     user.setPoints(user.getPoints()-100);
                     usersService.updateUser(userId, user);
-                    buyTicketWithDiscountedPrice(eventId, userId);
+                    buyTicketWithDiscountedPrice(eventId, userId, discount);
                 }
                 if(discount == 100){
                     user.setPoints(user.getPoints()-200);
                     usersService.updateUser(userId, user);
-                    buyTicketWithDiscountedPrice(eventId, userId);
+                    buyTicketWithDiscountedPrice(eventId, userId, discount);
                 }
             }else{
                 if(discount==20||discount==50||discount==100){
