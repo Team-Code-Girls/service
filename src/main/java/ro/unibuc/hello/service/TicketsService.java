@@ -121,6 +121,7 @@ public class TicketsService {
             } else {
                 throw new NoUsersFoundException("No user found with ID:" + ticket.getUserId());
             }
+            });
         }
         Map<String, String> result = new HashMap<>();
         for (String ageRange : ageRangeEventCount.keySet()) {
@@ -133,6 +134,11 @@ public class TicketsService {
             String eventName = eventRepository.findById(mostPopularEventId)
                     .map(EventEntity::geteventName)
                     .orElseThrow(() -> new NoEventsFoundException("No event found with ID: "+ mostPopularEventId));
+                    .orElse("Unknown Event");
+    
+            String eventName = eventRepository.findById(mostPopularEventId)
+                    .map(EventEntity::geteventName)
+                    .orElseThrow(() -> new NoEventsFoundException("Event with ID " + mostPopularEventId + " not found."));
     
             result.put(ageRange, eventName);
         }

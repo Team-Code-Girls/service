@@ -10,6 +10,18 @@ Aplicația oferă funcționalități pentru analiza datelor despre bilete, avân
 
 1. Listă de evenimente sortate în funcție de popularitate, împreună cu procentul de bilete vândute pentru fiecare eveniment.
 2. Listă cu cel mai popular eveniment pentru fiecare grupă de vârstă, pe baza vânzărilor de bilete.
+## Sistemul de puncte - descriere
+Aplicația încadrează biletele în mai multe intervale de preț:
+ - 0 -> 50 => la achizitia unui astfel de bilet utilizatorul primeste 2 puncte
+ - 50 -> 100 => la achizitia unui astfel de bilet utilizatorul primeste 5 puncte
+ - 100 -> 150 => la achizitia unui astfel de bilet utilizatorul primeste 10 puncte
+ - 150 -> 200 => la achizitia unui astfel de bilet utilizatorul primeste 15 puncte
+ - 200 -> + => la achizitia unui astfel de bilet utilizatorul primeste 20 puncte
+
+Utilizatorul acumuleaza aceste puncte si poate beneficia de urmatoarele reduceri:
+ - 50 de puncte => reducere de 20%
+ - 100 de puncte => reducere de 50%
+ - 200 de puncte => reducere de 100%
 
 ## Arhitectura
 În ceea ce privește arhitectura aplicației, este o aplicație bazată pe arhitectura client-server și are la bază request-uri http (get, post, put, delete).
