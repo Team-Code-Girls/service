@@ -5,10 +5,13 @@ import org.springframework.stereotype.Component;
 
 import ro.unibuc.hello.data.TicketEntity;
 import ro.unibuc.hello.data.EventEntity;
+import ro.unibuc.hello.data.UserEntity;
 import ro.unibuc.hello.dto.Ticket;
+import ro.unibuc.hello.dto.User;
 import ro.unibuc.hello.service.UsersService;
 import ro.unibuc.hello.exception.NoTicketsFoundException;  
 import ro.unibuc.hello.exception.NoEventsFoundException;
+import ro.unibuc.hello.exception.NoUsersFoundException;
 
 import ro.unibuc.hello.data.TicketRepository;
 import ro.unibuc.hello.data.EventRepository;
@@ -107,12 +110,17 @@ public class TicketsService {
         }
         Map<String, Map<String, Long>> ageRangeEventCount = new HashMap<>();
         for (TicketEntity ticket : tickets) {
-            usersService.getUserById(ticket.getUserId()).ifPresent(user -> {
+            Optional<User> userOpt = usersService.getUserById(ticket.getUserId());
+            if (userOpt.isPresent()) {
+                User user = userOpt.get();
                 int age = user.getAge();
                 String ageRange = getAgeRange(age);
                 ageRangeEventCount.putIfAbsent(ageRange, new HashMap<>());
                 Map<String, Long> eventCount = ageRangeEventCount.get(ageRange);
                 eventCount.put(ticket.getEventId(), eventCount.getOrDefault(ticket.getEventId(), 0L) + 1);
+            } else {
+                throw new NoUsersFoundException("No user found with ID:" + ticket.getUserId());
+            }
             });
         }
         Map<String, String> result = new HashMap<>();
@@ -121,6 +129,11 @@ public class TicketsService {
             String mostPopularEventId = eventCount.entrySet().stream()
                     .max(Map.Entry.comparingByValue())
                     .map(Map.Entry::getKey)
+                    .orElseThrow(() -> new NoEventsFoundException("No events found in this age range."));
+    
+            String eventName = eventRepository.findById(mostPopularEventId)
+                    .map(EventEntity::geteventName)
+                    .orElseThrow(() -> new NoEventsFoundException("No event found with ID: "+ mostPopularEventId));
                     .orElse("Unknown Event");
     
             String eventName = eventRepository.findById(mostPopularEventId)
