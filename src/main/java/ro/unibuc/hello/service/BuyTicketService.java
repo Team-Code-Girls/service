@@ -65,12 +65,14 @@ public class BuyTicketService {
 
         if(event.getSoldTickets()<event.getTotalTickets()){
             event.setSoldTickets(event.getSoldTickets()+1);
+            int priceTicket = event.getTicketPrice();
             eventService.updateEvent(eventId, event);
+            eventService.checkSales(event);
             List<Ticket> tickets = ticketService.getAllTickets();
             int idTicket = tickets.size();
             TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), eventId, userId, day, month, year, price);
             ticketRepository.save(ticket);
-            int priceTicket = event.getTicketPrice();
+            
             int numberOfPoints = 0;
 
             if(priceTicket>0&&priceTicket<50){
@@ -115,6 +117,8 @@ public class BuyTicketService {
         if(event.getSoldTickets()<event.getTotalTickets()){
             event.setSoldTickets(event.getSoldTickets()+1);
             eventService.updateEvent(eventId, event);
+            eventService.checkSales(event);
+
             List<Ticket> tickets = ticketService.getAllTickets();
             int idTicket = tickets.size();
             TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), eventId, userId, day, month, year, price);

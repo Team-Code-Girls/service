@@ -3,41 +3,71 @@ POST http://localhost:8080/events
 Content-Type: application/json
 
 {
-    "id": "12345",
-    "eventName": "Eveniment test",
+    "id": "evNormal",
+    "eventName": "Eveniment 1",
     "organizerId": "5678",
-    "date": "2025-06-01",
+    "date": "2025-03-19",
+    "time": "19:00",
     "totalTickets": 100,
-    "soldTickets":0,
-    "location": "Bucharest",
-    "description": "Descriere eveniment test"
+    "soldTickets":78,
+    "ticketPrice":50,
+    "location": "Iasi",
+    "description": "Descriere eveniment 1"
+}
+
+
+### Increase price on event day
+@IdEventN = evNormal
+PUT http://localhost:8080/events/eventDayPrice/{{IdEventN}}
+
+
+### Create second event
+POST http://localhost:8080/events
+Content-Type: application/json
+
+{
+    "id": "evIncrease",
+    "eventName": "Eveniment 2",
+    "organizerId": "5678",
+    "date": "2025-03-19",
+    "time": "19:00",
+    "totalTickets": 100,
+    "soldTickets":78,
+    "ticketPrice":50,
+    "location": "Bucuresti",
+    "description": "Descriere eveniment 2"
 }
 
 ### Get all events
 GET http://localhost:8080/events
 
 ### Get event by ID 
-@eventId = 12345
+@eventId = evNormal
 GET http://localhost:8080/events/{{eventId}}
 
+
 ### Update an existing event 
-PUT http://localhost:8080/events/{{eventId}}
+
+PUT http://localhost:8080/events/{{IdEventN}}
 Content-Type: application/json
 
 {
-    "name": "Updated Eveniment",
+    "eventName": "Eveniment 1",
     "organizerId": "5678",
-    "date": "2025-06-02",
-    "totalTickets":80,
-    "soldTickets":10,
-    "location": "Cluj-Napoca",
-    "description": "Descriere update."
+    "date": "2025-03-20",
+    "totalTickets":100,
+    "soldTickets":50,
+    "ticketPrice":50,
+    "location": "Bucuresti",
+    "description": "Update descriere eveniment 1."
 }
 
+### Get discount for unsold events (minimum 50% unsold tickets)
+PUT http://localhost:8080/events/discount/{{IdEventN}}
 
 ### Get event by event name 
-@eventName = Updated Eveniment
-GET http://localhost:8080/events/eventName/{{eventName}}
+@eventNameI = Eveniment 2
+GET http://localhost:8080/events/eventName/{{eventNameI}}
 
 ### Get events by organizer ID 
 @organizerId = 5678
@@ -189,8 +219,8 @@ GET http://localhost:8080/tickets/popular-events
 GET http://localhost:8080/tickets/age-stats
 
 ### Get event by event name 
-@eventName = Updated Eveniment
-GET http://localhost:8080/events/eventName/{{eventName}}
+#@eventName = Updated Eveniment
+#GET http://localhost:8080/events/eventName/{{eventName}}
 
 ### Get events by organizer ID 
 @organizerId = 5678
@@ -256,6 +286,6 @@ Content-Type: application/json
     "points": "{{postUserPoints2}}"
 }
 
-POST http://localhost:8080/tickets/buy/123456/3
+POST http://localhost:8080/tickets/buy/evIncrease/3
 
 POST http://localhost:8080/tickets/buy/discount/12345/3/100
