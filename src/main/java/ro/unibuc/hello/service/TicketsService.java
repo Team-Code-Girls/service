@@ -38,6 +38,7 @@ public class TicketsService {
 
     @Autowired
     private UsersService usersService;
+    
 
     public Ticket saveTicket(Ticket ticket){
         TicketEntity entity = new TicketEntity();
@@ -47,23 +48,24 @@ public class TicketsService {
         entity.setDay(ticket.getDay());
         entity.setMonth(ticket.getMonth());
         entity.setYear(ticket.getYear());
+        entity.setPrice(ticket.getPrice());
         ticketsRepository.save(entity);
-        return new Ticket(entity.getId(), entity.getUserId(), entity.getEventId(), 
-                        entity.getDay(), entity.getMonth(), entity.getYear());
+        return new Ticket(entity.getId(), entity.getEventId(), entity.getUserId(), 
+                        entity.getDay(), entity.getMonth(), entity.getYear(), entity.getPrice());
     }
 
     public Ticket getTicketById(String id) throws EntityNotFoundException {
         Optional<TicketEntity> optionalEntity = ticketsRepository.findById(id);
         TicketEntity entity = optionalEntity.orElseThrow(() -> new EntityNotFoundException(id));
         return new Ticket(entity.getId(), entity.getUserId(), entity.getEventId(), 
-                        entity.getDay(), entity.getMonth(), entity.getYear());
+                        entity.getDay(), entity.getMonth(), entity.getYear(), entity.getPrice());
     }
 
     public List<Ticket> getAllTickets(){
         List<TicketEntity> tickets = ticketsRepository.findAll();
         return tickets.stream()
                 .map(ticket -> new Ticket(ticket.getId(), ticket.getUserId(), ticket.getEventId(), ticket.getDay(),
-                            ticket.getMonth(), ticket.getYear()))
+                            ticket.getMonth(), ticket.getYear(), ticket.getPrice()))
                 .collect(Collectors.toList());
     }
 
