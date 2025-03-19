@@ -23,6 +23,17 @@ Utilizatorul acumuleaza aceste puncte si poate beneficia de urmatoarele reduceri
  - 100 de puncte => reducere de 50%
  - 200 de puncte => reducere de 100%
 
+## Ajustare dinamica preturi
+    
+1. Aplicare discount 20% la evenimente care, cu cel mult 3 zile inainte de ziua evenimentului, inca au sub 50% bilete vandute
+   - Nu se mai pot aplica scumpiri ale pretului dupa discount
+
+2. Crestere pret bilet 30% fata de pretul initial, in ziua evenimentului
+   - Nu se aplica la evenimentele care au dispus de discount
+     
+3. Crestere pret bilet 20%, atunci cand s-au vandut peste 80% din bilete 
+   - Nu se aplica in ziua evenimentului, daca atunci se atinge pragul 
+
 ## Arhitectura
 În ceea ce privește arhitectura aplicației, este o aplicație bazată pe arhitectura client-server și are la bază request-uri http (get, post, put, delete).
 
