@@ -38,7 +38,7 @@ public class EventEntity {
         this.organizerId = organizerId;
     }
 
-    public EventEntity(String id, String eventName, String description, String location, LocalDate date, String time, int totalTickets, int soldTickets, int ticketPrice, String organizerId, String priceOperation) {
+    public EventEntity(String id, String eventName, String description, String location, LocalDate date, String time, int totalTickets, int soldTickets, int ticketPrice, String organizerId) {
         this.id = id;
         this.eventName = eventName;
         this.description = description;

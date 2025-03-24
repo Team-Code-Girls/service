@@ -4,7 +4,7 @@ package ro.unibuc.hello.dto;
 import java.lang.annotation.Inherited;
 import java.time.LocalDate;
 import org.springframework.data.annotation.Id;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 public class Event {
@@ -21,7 +21,7 @@ public class Event {
     private int ticketPrice;
     private String organizerId;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonIgnore
     private String priceOperation = "none"; // putem avea "discount", "increase", "eventDayIncrease"
 
     public Event(){}
@@ -38,7 +38,7 @@ public class Event {
         this.organizerId = organizerId;
     }
 
-    public Event(String id, String eventName, String description, String location, LocalDate date, String time, int totalTickets, int soldTickets, int ticketPrice, String organizerId, String priceOperation) {
+    public Event(String id, String eventName, String description, String location, LocalDate date, String time, int totalTickets, int soldTickets, int ticketPrice, String organizerId) {
         this.id = id;
         this.eventName = eventName;
         this.description = description;

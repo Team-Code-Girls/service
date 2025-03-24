@@ -115,7 +115,7 @@ public class EventService {
         }
         return convertToDTO(event);      
     }
-
+    
     public Event updateEvent(String id, EventEntity updatedEventDTO) {
         EventEntity existingEvent = eventRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No event with id: " + id));
