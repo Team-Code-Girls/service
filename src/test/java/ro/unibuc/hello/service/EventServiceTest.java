@@ -194,7 +194,7 @@ public class EventServiceTest {
     }
 
     @Test 
-    void testCheckSales(){
+    void testCheckSales_Increase(){
         EventEntity eventEntity = new EventEntity("1", "Event Service", "Descriere", 
                                                   "Bucuresti", LocalDate.parse("2025-06-30"), 
                                                   "14:00", 100, 80, 50, "3");    
@@ -208,7 +208,7 @@ public class EventServiceTest {
     }
 
     @Test 
-    void testCheckSales_EventDateToday(){
+    void testCheckSales_NoIncrease(){
         EventEntity eventEntity = new EventEntity("1", "Event Service", "Descriere", 
                                                   "Bucuresti", LocalDate.parse("2025-03-25"), 
                                                   "14:00", 100, 80, 50, "3");    
@@ -220,5 +220,54 @@ public class EventServiceTest {
         assertEquals("none", eventEntity.getPriceOperation());
 
     }
+
+    @Test 
+    void testAddDiscount_Valid(){
+        EventEntity eventEntity = new EventEntity("1","Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-28"),"14:00", 200, 0, 100, "3");
+        when(eventRepository.findById("1")).thenReturn(Optional.of(eventEntity));
+        when(eventRepository.save(any(EventEntity.class))).thenReturn(eventEntity);
+
+        eventService.addDiscount("1");
+
+        assertEquals(80, eventEntity.getTicketPrice());
+        assertEquals("discount", eventEntity.getPriceOperation());
+
+    }
+
+    @Test 
+    void testAddDiscount_NonValid(){
+        EventEntity eventEntity = new EventEntity("1", "Event Service", "Descriere", 
+                                                  "Bucuresti", LocalDate.parse("2025-03-27"), 
+                                                  "14:00", 100, 81, 50, "3");    
+        when(eventRepository.save(any(EventEntity.class))).thenReturn(eventEntity);
+
+        eventService.checkSales(eventEntity);
+
+        assertEquals(50, eventEntity.getTicketPrice()); 
+        assertEquals("none", eventEntity.getPriceOperation());
+
+    }
+
+    @Test 
+    void testIncreasePriceOnEventDay_Valid(){
+        EventEntity eventEntity = new EventEntity("1", "Event Service", "Descriere", 
+                                 "Bucuresti", LocalDate.parse("2025-03-25"), 
+                                 "14:00", 100, 81, 50, "3");   
+                                 
+        when(eventRepository.findById("1")).thenReturn(Optional.of(eventEntity));
+        when(eventRepository.save(any(EventEntity.class))).thenReturn(eventEntity);
+
+        eventService.increasePriceOnEventDay("1");
+
+        assertEquals(65, eventEntity.getTicketPrice());
+        assertEquals("eventDayIncrease", eventEntity.getPriceOperation());
+
+        
+    }
+
+
+
+
+
 
 }
