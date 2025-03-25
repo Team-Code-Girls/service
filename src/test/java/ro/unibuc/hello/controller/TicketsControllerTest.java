@@ -1,213 +1,142 @@
-// package ro.unibuc.hello.controller;
+package ro.unibuc.hello.controller;
  
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
-// import org.mockito.InjectMocks;
-// import org.mockito.Mock;
-// import org.mockito.MockitoAnnotations;
-// import org.springframework.http.MediaType;
-// import org.springframework.test.web.servlet.MockMvc;
-// import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-// import ro.unibuc.hello.dto.Ticket;
-// import ro.unibuc.hello.data.TicketEntity;
-// import ro.unibuc.hello.data.TicketRepository;
-// import ro.unibuc.hello.exception.EntityNotFoundException;
-// import ro.unibuc.hello.service.TicketsService;
-// import ro.unibuc.hello.service.BuyTicketService;
-// import ro.unibuc.hello.controller.TicketsController;
+import ro.unibuc.hello.dto.Ticket;
+import ro.unibuc.hello.data.TicketEntity;
+import ro.unibuc.hello.data.TicketRepository;
+import ro.unibuc.hello.exception.EntityNotFoundException;
+import ro.unibuc.hello.service.TicketsService;
+import ro.unibuc.hello.service.BuyTicketService;
+import ro.unibuc.hello.controller.TicketsController;
 
-// import java.beans.Transient;
-// import java.util.Arrays;
-// import java.util.List;
+import java.beans.Transient;
+import java.util.Arrays;
+import java.util.List;
 
-// import static org.junit.Assert.assertTrue;
-// import static org.junit.jupiter.api.Assertions.assertThrows;
-// import static org.mockito.ArgumentMatchers.*;
-// import static org.mockito.Mockito.*;
-// import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-// class GreetingsControllerTest {
+class GreetingsControllerTest {
 
-//     @Mock
-//     private TicketsService ticketsService;
+    @Mock
+    private TicketsService ticketsService;
 
-//     @Mock
-//     private TicketRepository ticketsRepository;
+    @Mock
+    private BuyTicketService buyTicketsService;
 
-//     @InjectMocks
-//     private TicketsController ticketsController;
+    @Mock
+    private TicketRepository ticketsRepository;
 
-//     private MockMvc mockMvc;
+    @InjectMocks
+    private TicketsController ticketsController;
 
-//     @BeforeEach
-//     public void setUp() {
-//         MockitoAnnotations.openMocks(this);
-//         mockMvc = MockMvcBuilders.standaloneSetup(ticketsController).build();
-//     }
+    private MockMvc mockMvc;
 
-//     //buy ticket with discount
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(ticketsController).build();
+    }
+
+    //buy ticket with discount
+    @Test 
+    void test_buyTicketWithDiscount() throws Exception {
+        String eventId = "12345";
+        String userId = "3";
+        int discount = 20;
+        doNothing().when(buyTicketsService).buyTicketWithDiscount(eventId, userId, discount);
+        mockMvc.perform(post("/tickets/buy/discount/{eventId}/{userId}/{discount}", eventId, userId, discount))
+                .andExpect(status().isOk());
+    }
     
-//     //buy ticket
+    //buy ticket
+    @Test 
+    void test_buyTicket() throws Exception {
+        String eventId = "12345";
+        String userId = "3";
+        doNothing().when(buyTicketsService).buyTicket(eventId, userId);
+        mockMvc.perform(post("/tickets/buy/{eventId}/{userId}", eventId, userId))
+                .andExpect(status().isOk());
+    }
+
+
+    //get one ticket
+    @Test 
+    void test_getOneTicket() throws Exception {
+        String ticketId = "1";
+        Ticket ticket = new Ticket("1", "3", "12345", 22, 3, 2025, 250);
+        when(ticketsService.getTicketById(ticketId)).thenReturn(ticket);
+        mockMvc.perform(get("/tickets/{id}", ticketId))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value("1"))
+            .andExpect(jsonPath("$.userId").value("3"))
+            .andExpect(jsonPath("$.eventId").value("12345"))
+            .andExpect(jsonPath("$.day").value(22))
+            .andExpect(jsonPath("$.month").value(3))
+            .andExpect(jsonPath("$.year").value(2025))
+            .andExpect(jsonPath("$.price").value(250));
+    }
     
-//     //get one ticket
+    //get all tickets
+    @Test 
+    void test_getAllTickets() throws Exception {
+        Ticket ticket1 = new Ticket("1", "3", "12345", 22, 3, 2025, 250);
+        Ticket ticket2 = new Ticket("2", "4", "12345", 22, 3, 2025, 250);
+        Ticket ticket3 = new Ticket("3", "5", "12345", 22, 3, 2025, 250);
+        List<Ticket> tickets = List.of(ticket1, ticket2, ticket3);
+        when(ticketsService.getAllTickets()).thenReturn(tickets);
+        mockMvc.perform(get("/tickets"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].id").value("1"))
+            .andExpect(jsonPath("$[1].id").value("2"))
+            .andExpect(jsonPath("$[2].id").value("3"));
+    }
     
-//     //get all tickets
-    
-//     //post a ticket
+    //post a ticket
+    @Test 
+    void test_createTicket() throws Exception {
+        String postTicketId = "1";
+        String postUserId = "3";
+        String postEventId = "12345";
+        int postDay = 20;
+        int postMonth = 3;
+        int postYear = 2025;
+        int postPrice = 200;
+        TicketEntity ticketEntity = new TicketEntity(postTicketId, postEventId, postUserId, postDay,
+                                            postMonth, postYear, postPrice);
+        Ticket ticket = new Ticket(postTicketId, postUserId, postEventId,  postDay,
+                                    postMonth, postYear, postPrice);
+        when(ticketsService.saveTicket(any(Ticket.class))).thenReturn(ticket);
+        mockMvc.perform(post("/tickets")
+               .contentType(MediaType.APPLICATION_JSON)
+               .content("{\"id\":\"" + postTicketId + "\","
+                        + "\"userId\":\"" + postUserId + "\","
+                        + "\"eventId\":\"" + postEventId + "\","
+                        + "\"day\":" + postDay + ","
+                        + "\"month\":" + postMonth + ","
+                        + "\"year\":" + postYear + ","
+                        + "\"price\":" + postPrice + "}"))
+               .andExpect(status().isOk());
+    }
 
-//     //delete a ticket
-
-//     // @Test
-//     // void test_deleteTicket() throws Exception {
-//     //     String id = "1";
-//     //     Ticket ticket = new Ticket("1", "3", "12345", 25, 3, 2025, 100);
-//     //     when(ticketsService.saveTicket(any(Ticket.class))).thenReturn(ticket);
-//     //     mockMvc.perform(post("/tickets")
-//     //         .contentType(MediaType.APPLICATION_JSON)
-//     //         .content("{\"id\":\"1\",\"userId\":\"3\",\"eventId\":\"12345\",\"day\":25,\"month\":3,\"year\":2025,\"price\":100}"))
-//     //         .andExpect(status().isOk())  
-//     //         .andExpect(jsonPath("$.id").value("1"))  
-//     //         .andExpect(jsonPath("$.eventId").value("12345"))
-//     //         .andExpect(jsonPath("$.userId").value("3"))
-//     //         .andExpect(jsonPath("$.price").value(100));
-//     //     mockMvc.perform(delete("/tickets/{id}", "1"))
-//     //            .andExpect(status().isOk());
-//     //     verify(ticketsService, times(1)).deleteTicket(id);
-//     //     mockMvc.perform(get("/greetings"))
-//     //             .andExpect(status().isNoContent())
-//     //             .andExpect(jsonPath("$").isEmpty());
-//     // }
-
-
-//     @Test 
-//     void test_deleteTicket() throws Exception {
-//         String ticketId = "1";
-//         TicketEntity ticket = new TicketEntity(ticketId, "Event1", "User1", 25, 3, 2025, 100);
-//         when(ticketsRepository.findById(ticketId)).thenReturn(Optional.of(ticket));
-//         doNothing().when(ticketsService.deleteTicket(ticketId));
-//         mockMvc.perform(delete("/tickets/{id}", ticketId))
-//                 .andExpect(status().isOk());
-//         verify(ticketsService, times(1)).deleteTicket(ticketId);
-//     }
-
-//     // @Test
-//     // void test_deleteGreeting() throws Exception {
-//     //     String id = "1";
-//     //     Greeting greeting = new Greeting(id, "Hello");
-//     //     when(greetingsService.saveGreeting(any(Greeting.class))).thenReturn(greeting);
-    
-//     //     // add greeting
-//     //     mockMvc.perform(post("/greetings")
-//     //            .content("{\"content\":\"Hello\"}")
-//     //            .contentType(MediaType.APPLICATION_JSON))
-//     //            .andExpect(status().isOk());
-    
-//     //     // delete greeting
-//     //     mockMvc.perform(delete("/greetings/{id}", id))
-//     //            .andExpect(status().isOk());
-    
-//     //     verify(greetingsService, times(1)).deleteGreeting(id);
-    
-//     //     // check if greeting is deleted
-//     //     mockMvc.perform(get("/greetings"))
-//     //            .andExpect(status().isOk())
-//     //            .andExpect(jsonPath("$").isEmpty());
-//     // }
-
-
-
-
-
-
-//     // @Test
-//     // void test_sayHello() throws Exception {
-//     //     // Arrange
-//     //     Greeting greeting = new Greeting("1", "Hello, there!");
-//     //     when(greetingsService.hello("there")).thenReturn(greeting);
-    
-//     //     // Act & Assert
-//     //     mockMvc.perform(get("/hello-world?name=there"))
-//     //            .andExpect(status().isOk())
-//     //            .andExpect(jsonPath("$.id").value("1"))
-//     //            .andExpect(jsonPath("$.content").value("Hello, there!"));
-//     // }
-    
-
-//     // @Test
-//     // void test_info() throws Exception {
-//     //     // Arrange
-//     //     Greeting greeting = new Greeting("1", "there : some description");
-//     //     when(greetingsService.buildGreetingFromInfo("there")).thenReturn(greeting);
-    
-//     //     // Act & Assert
-//     //     mockMvc.perform(get("/info?title=there"))
-//     //            .andExpect(status().isOk())
-//     //            .andExpect(jsonPath("$.id").value("1"))
-//     //            .andExpect(jsonPath("$.content").value("there : some description"));
-//     // }    
-
-//     // @Test
-//     // void test_info_cascadesException() {
-//     //     // Arrange
-//     //     String title = "there";
-//     //     when(greetingsService.buildGreetingFromInfo(title)).thenThrow(new EntityNotFoundException(title));
-
-//     //     // Act
-//     //     EntityNotFoundException exception = assertThrows(
-//     //             EntityNotFoundException.class,
-//     //             () -> greetingsController.info(title),
-//     //             "Expected info() to throw EntityNotFoundException, but it didn't");
-
-//     //     // Assert
-//     //     assertTrue(exception.getMessage().contains(title));
-//     // }
-
-//     // @Test
-//     // void test_getAllGreetings() throws Exception {
-//     //     // Arrange
-//     //     List<Greeting> greetings = Arrays.asList(new Greeting("1", "Hello"), new Greeting("2", "Hi"));
-//     //     when(greetingsService.getAllGreetings()).thenReturn(greetings);
-
-//     //     // Act & Assert
-//     //     mockMvc.perform(get("/greetings"))
-//     //         .andExpect(status().isOk())
-//     //         .andExpect(jsonPath("$[0].id").value("1"))
-//     //         .andExpect(jsonPath("$[0].content").value("Hello"))
-//     //         .andExpect(jsonPath("$[1].id").value("2"))
-//     //         .andExpect(jsonPath("$[1].content").value("Hi"));
-//     // }
-
-//     // @Test
-//     // void test_createGreeting() throws Exception {
-//     //     // Arrange
-//     //     Greeting newGreeting = new Greeting("1", "Hello, World!");
-//     //     when(greetingsService.saveGreeting(any(Greeting.class))).thenReturn(newGreeting);
-    
-//     //     // Act & Assert
-//     //     mockMvc.perform(post("/greetings")
-//     //            .content("{\"content\":\"Hello, World!\"}")
-//     //            .contentType(MediaType.APPLICATION_JSON))
-//     //            .andExpect(status().isOk())
-//     //            .andExpect(jsonPath("$.id").value("1"))
-//     //            .andExpect(jsonPath("$.content").value("Hello, World!"));
-//     // }
-    
-//     // @Test
-//     // void test_updateGreeting() throws Exception {
-//     //     // Arrange
-//     //     String id = "1";
-//     //     Greeting updatedGreeting = new Greeting(id, "Updated Greeting");
-//     //     when(greetingsService.updateGreeting(eq(id), any(Greeting.class))).thenReturn(updatedGreeting);
-    
-//     //     // Act & Assert
-//     //     mockMvc.perform(put("/greetings/{id}", id)
-//     //            .content("{\"content\":\"Updated Greeting\"}")
-//     //            .contentType(MediaType.APPLICATION_JSON))
-//     //            .andExpect(status().isOk())
-//     //            .andExpect(jsonPath("$.id").value("1"))
-//     //            .andExpect(jsonPath("$.content").value("Updated Greeting"));
-//     // }
-    
-// }
+    //delete a ticket
+    @Test 
+    void test_deleteTicket() throws Exception {
+        String ticketId = "1";
+        doNothing().when(ticketsService).deleteTicket(ticketId);
+        mockMvc.perform(delete("/tickets/{id}", ticketId))
+                .andExpect(status().isOk());
+    }
+}
