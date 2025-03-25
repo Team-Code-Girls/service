@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 
@@ -41,7 +42,7 @@ public class EventsServiceTest {
 
     @Test 
     void testCreateEvent(){
-        EventEntity eventEntity = new EventEntity("1","Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3");
+        EventEntity eventEntity = new EventEntity("1","Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3" ,"none");
         when(eventRepository.save(eventEntity)).thenReturn(eventEntity);
 
         Event event = eventService.createEvent(eventEntity);
@@ -63,8 +64,8 @@ public class EventsServiceTest {
     @Test 
     void testGetAllEvents(){
         List<EventEntity> events = Arrays.asList(
-            new EventEntity("1","Event 1", "Descriere 1","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3"),
-            new EventEntity("2", "Event 2", "Descriere 2","Bucuresti", LocalDate.parse("2025-03-29"),"16:00", 100, 0, 50, "4")
+            new EventEntity("1","Event 1", "Descriere 1","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3","none"),
+            new EventEntity("2", "Event 2", "Descriere 2","Bucuresti", LocalDate.parse("2025-03-29"),"16:00", 100, 0, 50, "4","none")
         );
         when(eventRepository.findAll()).thenReturn(events);
 
@@ -82,7 +83,7 @@ public class EventsServiceTest {
 
     @Test 
     void testGetEventById_ExistingEntity() {
-        EventEntity eventEntity = new EventEntity("1","Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3");
+        EventEntity eventEntity = new EventEntity("1","Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3","none");
         when(eventRepository.findById("1")).thenReturn(Optional.of(eventEntity));
 
         Event event = eventService.getEventById("1");
@@ -102,7 +103,7 @@ public class EventsServiceTest {
 
     @Test 
     void testGetEventByEventName(){
-        EventEntity eventEntity = new EventEntity("1","Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3");
+        EventEntity eventEntity = new EventEntity("1","Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3","none");
         when(eventRepository.findByEventName("Event Service")).thenReturn(Optional.of(eventEntity));
 
         Event event = eventService.getEventByEventName("Event Service");
@@ -114,7 +115,7 @@ public class EventsServiceTest {
     @Test 
     void testGetEventByEventName_NonExistingEntity(){
         String eventName = "Non existing";
-        when(eventRepository.findByEventName("Non existing")).thenReturn(Optional.empty());
+        when(eventRepository.findByEventName(eventName)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> eventService.getEventByEventName("Non existing")); 
 
@@ -124,8 +125,8 @@ public class EventsServiceTest {
     void testGetEventsByOrganizerId_ExistingEntity() {
         String organizerId = "3";
         List<EventEntity> eventEntities = Arrays.asList(
-            new EventEntity("1", "Event 1", "Descriere 1", "Bucuresti", LocalDate.parse("2025-03-30"), "14:00", 200, 0, 100, organizerId),
-            new EventEntity("2", "Event 2", "Descriere 2", "Bucuresti", LocalDate.parse("2025-04-01"), "16:00", 150, 0, 80, organizerId)
+            new EventEntity("1", "Event 1", "Descriere 1", "Bucuresti", LocalDate.parse("2025-03-30"), "14:00", 200, 0, 100, organizerId,"none"),
+            new EventEntity("2", "Event 2", "Descriere 2", "Bucuresti", LocalDate.parse("2025-04-01"), "16:00", 150, 0, 80, organizerId,"none")
         );
         when(eventRepository.findByOrganizerId(organizerId)).thenReturn(eventEntities);
 
@@ -150,7 +151,7 @@ public class EventsServiceTest {
     @Test 
     void testUpdateEvent_ExistingEntity(){
         String eventId = "1"; 
-        EventEntity updatedEventEntity = new EventEntity(eventId,"Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3");
+        EventEntity updatedEventEntity = new EventEntity(eventId,"Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3","none");
         when(eventRepository.findById(eventId)).thenReturn(Optional.of(updatedEventEntity));
         when(eventRepository.save(any(EventEntity.class))).thenReturn(updatedEventEntity);
 
@@ -164,7 +165,7 @@ public class EventsServiceTest {
     @Test 
     void testUpdateEvent_NonExistingEntity(){
         String eventId = "non";
-        EventEntity updatedEventEntity = new EventEntity(eventId,"Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3");
+        EventEntity updatedEventEntity = new EventEntity(eventId,"Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3","none");
         when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> eventService.updateEvent(eventId, updatedEventEntity)); 
@@ -176,7 +177,7 @@ public class EventsServiceTest {
         String eventId = "1";
         EventEntity eventEntity = new EventEntity(eventId, "Event Service", "Descriere", 
                                                   "Bucuresti", LocalDate.parse("2025-03-30"), 
-                                                  "14:00", 200, 0, 100, "3");    
+                                                  "14:00", 200, 0, 100, "3","none");    
         when(eventRepository.findById(eventId)).thenReturn(Optional.of(eventEntity));
   
         assertDoesNotThrow(() -> eventService.deleteEvent(eventId));
@@ -197,7 +198,7 @@ public class EventsServiceTest {
     void testCheckSales_Increase(){
         EventEntity eventEntity = new EventEntity("1", "Event Service", "Descriere", 
                                                   "Bucuresti", LocalDate.parse("2025-06-30"), 
-                                                  "14:00", 100, 80, 50, "3");    
+                                                  "14:00", 100, 80, 50, "3","none");    
         when(eventRepository.save(any(EventEntity.class))).thenReturn(eventEntity);
 
         eventService.checkSales(eventEntity);
@@ -211,7 +212,7 @@ public class EventsServiceTest {
     void testCheckSales_NoIncrease(){
         EventEntity eventEntity = new EventEntity("1", "Event Service", "Descriere", 
                                                   "Bucuresti", LocalDate.parse("2025-03-25"), 
-                                                  "14:00", 100, 80, 50, "3");    
+                                                  "14:00", 100, 80, 50, "3","none");    
         when(eventRepository.save(any(EventEntity.class))).thenReturn(eventEntity);
 
         eventService.checkSales(eventEntity);
@@ -223,7 +224,7 @@ public class EventsServiceTest {
 
     @Test 
     void testAddDiscount_Valid(){
-        EventEntity eventEntity = new EventEntity("1","Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-28"),"14:00", 200, 0, 100, "3");
+        EventEntity eventEntity = new EventEntity("1","Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-28"),"14:00", 200, 0, 100, "3","none");
         when(eventRepository.findById("1")).thenReturn(Optional.of(eventEntity));
         when(eventRepository.save(any(EventEntity.class))).thenReturn(eventEntity);
 
@@ -238,7 +239,7 @@ public class EventsServiceTest {
     void testAddDiscount_NonValid(){
         EventEntity eventEntity = new EventEntity("1", "Event Service", "Descriere", 
                                                   "Bucuresti", LocalDate.parse("2025-03-27"), 
-                                                  "14:00", 100, 81, 50, "3");    
+                                                  "14:00", 100, 81, 50, "3","none");    
         when(eventRepository.save(any(EventEntity.class))).thenReturn(eventEntity);
 
         eventService.checkSales(eventEntity);
@@ -252,7 +253,7 @@ public class EventsServiceTest {
     void testIncreasePriceOnEventDay_Valid(){
         EventEntity eventEntity = new EventEntity("1", "Event Service", "Descriere", 
                                  "Bucuresti", LocalDate.parse("2025-03-25"), 
-                                 "14:00", 100, 81, 50, "3");   
+                                 "14:00", 100, 81, 50, "3","none");   
                                  
         when(eventRepository.findById("1")).thenReturn(Optional.of(eventEntity));
         when(eventRepository.save(any(EventEntity.class))).thenReturn(eventEntity);

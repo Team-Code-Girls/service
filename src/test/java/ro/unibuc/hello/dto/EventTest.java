@@ -15,7 +15,7 @@ public class EventTest {
 
     private Event event;
 
-    Event eventObj1 = new Event("1","Event 1", "Descriere 1","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3");
+    Event eventObj1 = new Event("1","Event 1", "Descriere 1","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3","none");
     Event eventObj2 = new Event("Event 2", "Descriere 2","Bucuresti", LocalDate.parse("2025-03-29"),"16:00", 100, 0, 50, "4");
 
     @BeforeEach

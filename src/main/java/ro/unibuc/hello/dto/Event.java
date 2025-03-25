@@ -1,9 +1,7 @@
 package ro.unibuc.hello.dto;
 
 
-import java.lang.annotation.Inherited;
 import java.time.LocalDate;
-import org.springframework.data.annotation.Id;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -38,7 +36,7 @@ public class Event {
         this.organizerId = organizerId;
     }
 
-    public Event(String id, String eventName, String description, String location, LocalDate date, String time, int totalTickets, int soldTickets, int ticketPrice, String organizerId) {
+    public Event(String id, String eventName, String description, String location, LocalDate date, String time, int totalTickets, int soldTickets, int ticketPrice, String organizerId, String priceOperation ) {
         this.id = id;
         this.eventName = eventName;
         this.description = description;
