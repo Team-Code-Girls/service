@@ -180,6 +180,8 @@ public class BuyTicketService {
                     throw new EntityNotFoundException("This discount value is not available.");
                 }
             }
+        }else{
+            throw new EntityNotFoundException("No tickets available for event: " + eventId);
         }
         
     }
