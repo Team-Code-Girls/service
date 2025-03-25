@@ -77,7 +77,17 @@ class EventServiceTest {
             ticketsService.getMostPopularEventsWithPercentage();
         });
     }
-
+    @Test
+    void testGetMostPopularEventsWithPercentage_EventNotFound() {
+        when(ticketsRepository.count()).thenReturn((long) mockTickets.size());
+        when(ticketsRepository.findAll()).thenReturn(mockTickets);
+        when(eventRepository.findById("event1")).thenReturn(Optional.empty());
+    
+        NoEventsFoundException exception = assertThrows(NoEventsFoundException.class, 
+            () -> ticketsService.getMostPopularEventsWithPercentage());
+    
+        assertEquals("Event with ID event1 not found.", exception.getMessage());
+    }
     @Test
     void testGetMostPopularEventByAgeRange() {
         when(ticketsRepository.findAll()).thenReturn(mockTickets);
@@ -138,6 +148,40 @@ class EventServiceTest {
             "user3", "Alice Smith", 22, "alice@gmail.com", "3333333333", 250
         )));
         when(eventRepository.findById("event1")).thenReturn(Optional.empty());
+        assertThrows(NoEventsFoundException.class, () -> {
+            ticketsService.getMostPopularEventByAgeRange();
+        });
+    }
+    @Test
+    void testGetMostPopularEventByAgeRange_EventNotFoundInThisAgeRange() {
+        // Step 1: Mock tickets data - add ticket for event1, event2, and event3
+        List<TicketEntity> mockTickets = new ArrayList<>();
+        mockTickets.add(new TicketEntity("1", "event1", "user1", 3, 1, 2024, 55)); // user1 to event1
+        mockTickets.add(new TicketEntity("2", "event2", "user2", 3, 1, 2024, 65)); // user2 to event2
+        mockTickets.add(new TicketEntity("3", "event3", "user3", 3, 1, 2024, 55)); // user3 to event3
+    
+        when(ticketsRepository.findAll()).thenReturn(mockTickets);
+    
+        // Step 2: Mock user data
+        when(usersService.getUserById("user1")).thenReturn(Optional.of(new User(
+            "user1", "Daria Updated", 22, "updated@yahoo.com", "1111111111", 150
+        )));
+        when(usersService.getUserById("user2")).thenReturn(Optional.of(new User(
+            "user2", "John Doe", 31, "johndoe@gmail.com", "2222222222", 200
+        )));
+        when(usersService.getUserById("user3")).thenReturn(Optional.of(new User(
+            "user3", "Alice Smith", 27, "alice@gmail.com", "3333333333", 300
+        )));
+    
+        // Step 3: Mock event repository - event3 is missing
+        when(eventRepository.findById("event1")).thenReturn(Optional.of(new EventEntity(
+            "event1", "Concert", "Descriere eveniment 1", "Iasi", LocalDate.of(2025, 3, 19), "19:00", 100, 78, 50, "1234", "none"
+        )));
+        when(eventRepository.findById("event2")).thenReturn(Optional.of(new EventEntity(
+            "event2", "Festival", "Descriere eveniment 2", "Bucharest", LocalDate.of(2025, 3, 20), "20:00", 200, 150, 60, "1234", "none"
+        )));
+        when(eventRepository.findById("event3")).thenReturn(Optional.empty());
+    
         assertThrows(NoEventsFoundException.class, () -> {
             ticketsService.getMostPopularEventByAgeRange();
         });
