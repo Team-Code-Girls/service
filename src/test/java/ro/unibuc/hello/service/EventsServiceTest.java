@@ -26,7 +26,7 @@ import ro.unibuc.hello.data.EventRepository;
 import ro.unibuc.hello.dto.Event;
 
 @ExtendWith(SpringExtension.class)
-public class EventServiceTest {
+public class EventsServiceTest {
 
     @Mock 
     private EventRepository eventRepository;
