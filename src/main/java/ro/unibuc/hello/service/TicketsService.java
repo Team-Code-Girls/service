@@ -46,7 +46,7 @@ public class TicketsService {
         entity.setYear(ticket.getYear());
         entity.setPrice(ticket.getPrice());
         ticketsRepository.save(entity);
-        return new Ticket(entity.getId(), entity.getEventId(), entity.getUserId(),
+        return new Ticket(entity.getId(), entity.getUserId(), entity.getEventId(),
                 entity.getDay(), entity.getMonth(), entity.getYear(), entity.getPrice());
     }
 
