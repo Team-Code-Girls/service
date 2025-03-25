@@ -1,15 +1,14 @@
-package ro.unibuc.hello.data;
+package ro.unibuc.hello.dto;
+
 
 import java.time.LocalDate;
-import org.springframework.data.annotation.Id;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
-public class EventEntity {
+public class Event {
 
-    @Id 
+
     private String id;
-
     private String eventName;
     private String description;
     private String location;
@@ -19,12 +18,13 @@ public class EventEntity {
     private int soldTickets;
     private int ticketPrice;
     private String organizerId;
+
     @JsonIgnore
     private String priceOperation = "none"; // putem avea "discount", "increase", "eventDayIncrease"
 
-    public EventEntity(){}
+    public Event(){}
 
-    public EventEntity(String eventName, String description, String location, LocalDate date, String time, int totalTickets, int soldTickets, int ticketPrice, String organizerId){
+    public Event(String eventName, String description, String location, LocalDate date, String time, int totalTickets, int soldTickets, int ticketPrice, String organizerId){
         this.eventName = eventName;
         this.description = description;
         this.location = location;
@@ -36,7 +36,7 @@ public class EventEntity {
         this.organizerId = organizerId;
     }
 
-    public EventEntity(String id, String eventName, String description, String location, LocalDate date, String time, int totalTickets, int soldTickets, int ticketPrice, String organizerId, String priceOperation) {
+    public Event(String id, String eventName, String description, String location, LocalDate date, String time, int totalTickets, int soldTickets, int ticketPrice, String organizerId, String priceOperation ) {
         this.id = id;
         this.eventName = eventName;
         this.description = description;
@@ -84,19 +84,6 @@ public class EventEntity {
 
     public String getPriceOperation() {return priceOperation;}
     public void setPriceOperation(String priceOperation){ this.priceOperation = priceOperation;}
-    
 
-    @Override
-    public String toString() {
-        String result = String.format(
-            "Event[id='%s', eventName='%s', location='%s', date='%s', time='%s', totalTickets=%d, soldTickets=%d, ticketPrice=%d, organizerId='%s']",
-            id, eventName, location, date, time, totalTickets,soldTickets, ticketPrice, organizerId);
-    
-        if (description != null && !description.isEmpty()) {
-            result += ", description= " + description;
-        }
-
-        return result;
-    }
     
 }

@@ -8,6 +8,9 @@ import org.w3c.dom.events.EventException;
 
 import ro.unibuc.hello.data.EventEntity;
 import ro.unibuc.hello.data.EventRepository;
+import ro.unibuc.hello.data.UserEntity;
+import ro.unibuc.hello.dto.User;
+import ro.unibuc.hello.dto.Event;
 import ro.unibuc.hello.exception.EntityNotFoundException;
 
 import java.util.List;
@@ -24,17 +27,38 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
-    public EventEntity createEvent(EventEntity event) {
-        return eventRepository.save(event);
+    private Event convertToDTO(EventEntity eventEntity) {
+        Event eventDTO = new Event();
+        eventDTO.setId(eventEntity.getId());
+        eventDTO.setEventName(eventEntity.geteventName());
+        eventDTO.setDescription(eventEntity.getDescription());
+        eventDTO.setLocation(eventEntity.getLocation());
+        eventDTO.setDate(eventEntity.getDate());
+        eventDTO.setTime(eventEntity.getTime());
+        eventDTO.setTotalTickets(eventEntity.getTotalTickets());
+        eventDTO.setSoldTickets(eventEntity.getSoldTickets());
+        eventDTO.setTicketPrice(eventEntity.getTicketPrice());
+        eventDTO.setOrganizerId(eventEntity.getOrganizerId());
+        eventDTO.setPriceOperation(eventEntity.getPriceOperation());
+        return eventDTO;
     }
 
-    public List<EventEntity> getAllEvents(){
-        return eventRepository.findAll();
+    public Event createEvent(EventEntity event) {
+        EventEntity savedEvent =  eventRepository.save(event);
+        return convertToDTO(savedEvent);
     }
 
-    public EventEntity getEventById(String id){
+    public List<Event> getAllEvents(){
+        return eventRepository.findAll()
+                              .stream()
+                              .map(this::convertToDTO)
+                              .collect(Collectors.toList());
+    }
+
+    public Event getEventById(String id) {        
         return eventRepository.findById(id)
-                .orElseThrow( () -> new EntityNotFoundException("Event with id:" +id+" not found."));
+                              .map(this::convertToDTO)
+                              .orElseThrow(() -> new EntityNotFoundException("No event with id: " + id));
     }
 
 
@@ -52,7 +76,7 @@ public class EventService {
         
     }
 
-    public EventEntity addDiscount(String id){
+    public Event addDiscount(String id){
         EventEntity event = eventRepository.findById(id)
                             .orElseThrow( () -> new EntityNotFoundException("No event with id:"+ id));        
         LocalDate currentDate = LocalDate.now();
@@ -65,10 +89,10 @@ public class EventService {
             event.setPriceOperation("discount");
             eventRepository.save(event);
         }  
-        return event;      
+        return convertToDTO(event);      
     }
 
-    public EventEntity increasePriceOnEventDay(String id){
+    public Event increasePriceOnEventDay(String id){
         EventEntity event = eventRepository.findById(id)
                 .orElseThrow ( ()-> new EntityNotFoundException("No event with id"+ id));
 
@@ -87,40 +111,38 @@ public class EventService {
             event.setPriceOperation("eventDayIncrease");
             event.setTicketPrice(newPrice);
             eventRepository.save(event);
-            return event;
+            return convertToDTO(event);      
         }
-        return event;
+        return convertToDTO(event);      
     }
-
-    public EventEntity updateEvent(String id, EventEntity updatedEvent){
-        if(!eventRepository.existsById(id)){
-            throw new EntityNotFoundException("No event with id: "+ id);
-        }
-        updatedEvent.setId(id);
-        eventRepository.save(updatedEvent);
-        return updatedEvent;
+    
+    public Event updateEvent(String id, EventEntity updatedEventDTO) {
+        EventEntity existingEvent = eventRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No event with id: " + id));
+    
+        updatedEventDTO.setId(id);
+        EventEntity savedEvent = eventRepository.save(updatedEventDTO);
+        return convertToDTO(savedEvent);
     }
 
     @Transactional
-    public void deleteEvent(String id){
-        EventEntity event =  eventRepository.findById(id)
-            .orElseThrow( () -> new EntityNotFoundException("Event with id:" +id+" not found."));       
-        
-        eventRepository.delete(event);
+    public void deleteEvent(String id) throws EntityNotFoundException {
+        EventEntity event = eventRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.valueOf(id)));
+                eventRepository.delete(event);
     }
 
-    public EventEntity getEventByEventName(String eventName){
-      return eventRepository.findByEventName(eventName)
-                .orElseThrow( () -> new EntityNotFoundException("No event with name: " + eventName)) ;
+    public Event getEventByEventName(String eventName) {
+        return eventRepository.findByEventName(eventName)
+                              .map(this::convertToDTO)
+                              .orElseThrow(() -> new EntityNotFoundException("No event with name: " + eventName));
     }
 
-    public List<EventEntity> getEventsByOrganizerId(String organizerId){
-         List<EventEntity> events =  eventRepository.findByOrganizerId(organizerId);
-         if (events.isEmpty()) {
-            throw new EntityNotFoundException("No events found for organizer : " + organizerId);
-        }
-        
-        return events;
+    public List<Event> getEventsByOrganizerId(String organizerId){
+         return eventRepository.findByOrganizerId(organizerId)
+                              .stream()
+                              .map(this::convertToDTO)
+                              .collect(Collectors.toList());
     }
 
 
