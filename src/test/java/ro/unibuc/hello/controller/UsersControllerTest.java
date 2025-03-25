@@ -57,8 +57,9 @@ class UserControllerTest {
                         + "\"fullName\":\"" + postUserName + "\","
                         + "\"email\":\"" + postUserEmail + "\","
                         + "\"age\":" + postUserAge + ","
+                        + "\"password\":\"" + postUserPassword + "\","
                         + "\"phoneNumber\":\"" + postUserPhone + "\","
-                        + "\"password\":\"" + postUserPassword + "\"}"))
+                        + "\"points\": 0" + "}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(postUserId))
                 .andExpect(jsonPath("$.fullName").value(postUserName))
@@ -119,7 +120,8 @@ class UserControllerTest {
                         + "\"age\":22,"
                         + "\"email\":\"dariahorga@yahoo.com\","
                         + "\"phoneNumber\":\"1234567890\","
-                        + "\"password\":\"helloworld1234\"}"))
+                        + "\"password\":\"" + "helloworld"+ "\","
+                        + "\"points\": 10" + "}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(userId))
                 .andExpect(jsonPath("$.fullName").value("Horga Daria"))

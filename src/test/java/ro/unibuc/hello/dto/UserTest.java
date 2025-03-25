@@ -31,4 +31,8 @@ class UserTest {
     void test_getPhoneNumber() {
         Assertions.assertEquals("1234567890", user.getPhoneNumber());
     }
+    @Test
+    void test_getPoints() {
+        Assertions.assertEquals(100, user.getPoints());
+    }
 }
