@@ -20,6 +20,7 @@ import ro.unibuc.hello.controller.TicketsController;
 import java.beans.Transient;
 import java.util.Arrays;
 import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -138,5 +139,36 @@ class GreetingsControllerTest {
         doNothing().when(ticketsService).deleteTicket(ticketId);
         mockMvc.perform(delete("/tickets/{id}", ticketId))
                 .andExpect(status().isOk());
+    }
+    @Test
+    void testGetMostPopularEvents() throws Exception {
+        List<Map<String, Object>> mockResponse = new ArrayList<>();
+        Map<String, Object> event = new HashMap<>();
+        event.put("eventName", "Concert A");
+        event.put("percentage", 75);
+        mockResponse.add(event);
+
+        when(ticketsService.getMostPopularEventsWithPercentage()).thenReturn(mockResponse);
+
+        mockMvc.perform(get("/tickets/popular-events")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].eventName").value("Concert A"))
+                .andExpect(jsonPath("$[0].percentage").value(75));
+    }
+
+    @Test
+    void testGetTicketCountByAgeRange() throws Exception {
+        Map<String, String> mockResponse = new HashMap<>();
+        mockResponse.put("18-25", "50");
+        mockResponse.put("26-35", "30");
+
+        when(ticketsService.getMostPopularEventByAgeRange()).thenReturn(mockResponse);
+
+        mockMvc.perform(get("/tickets/age-stats")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.18-25").value("50"))
+                .andExpect(jsonPath("$.26-35").value("30"));
     }
 }
