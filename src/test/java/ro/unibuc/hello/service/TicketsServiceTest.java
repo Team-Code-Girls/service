@@ -1,3 +1,4 @@
+package ro.unibuc.hello.service;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import static org.mockito.Mockito.*;
@@ -24,7 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
-class EventServiceTest {
+class TicketsServiceTest {
 
     @Mock
     private TicketRepository ticketsRepository;
