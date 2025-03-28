@@ -15,7 +15,6 @@ public class EventEntity {
     private String eventName;
     private String description;
     private String location;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
     private String time;
     private int totalTickets;
