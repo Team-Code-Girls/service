@@ -33,6 +33,8 @@ dependencies {
 	implementation 'org.springframework.data:spring-data-mongodb'
 	implementation 'commons-io:commons-io:2.18.0'
 	implementation 'jakarta.annotation:jakarta.annotation-api:3.0.0'
+	// implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1'
+
 
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
@@ -46,7 +48,6 @@ dependencies {
 	// Integration tests - test containers dependencies
     testImplementation "org.testcontainers:testcontainers:$testcontainersVersion"
     testImplementation "org.testcontainers:mongodb:$testcontainersVersion"
-	testImplementation 'org.mongodb:mongodb-driver-sync:5.0.1'
 
 	//	E2E tests
 	runtimeOnly "org.junit.vintage:junit-vintage-engine:$junitVersion"
