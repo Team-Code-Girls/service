@@ -43,6 +43,23 @@ public class EventService {
         return eventDTO;
     }
 
+    public Event saveEvent(Event event){
+        EventEntity entity = new EventEntity();
+        entity.setId(event.getId());
+        entity.setEventName(event.geteventName());
+        entity.setDescription(event.getDescription());
+        entity.setLocation(event.getLocation());
+        entity.setDate(event.getDate());
+        entity.setTime(event.getTime());
+        entity.setTotalTickets(event.getTotalTickets());
+        entity.setSoldTickets(event.getSoldTickets());
+        entity.setTicketPrice(event.getTicketPrice());
+        entity.setOrganizerId(event.getOrganizerId());
+        entity.setPriceOperation(event.getPriceOperation());
+        eventRepository.save(entity);
+        return new Event(event.getId(),event.geteventName(),event.getDescription(),event.getLocation(),event.getDate(), event.getTime(), event.getTotalTickets(), event.getSoldTickets(), event.getTicketPrice(), event.getOrganizerId(),event.getPriceOperation());
+    }
+
     public Event createEvent(EventEntity event) {
         EventEntity savedEvent =  eventRepository.save(event);
         return convertToDTO(savedEvent);
@@ -130,6 +147,10 @@ public class EventService {
         EventEntity event = eventRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.valueOf(id)));
                 eventRepository.delete(event);
+    }
+
+    public void deleteAllEvents() {
+        eventRepository.deleteAll();
     }
 
     public Event getEventByEventName(String eventName) {

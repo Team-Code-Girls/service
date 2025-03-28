@@ -64,6 +64,10 @@ public class EventsController {
         eventsService.deleteEvent(id);
         
     }
+    @DeleteMapping("/events")
+    public void deleteAllEvents(){
+        eventsService.deleteAllEvents();
+    }
 
     @GetMapping("/events/eventName/{eventName}")
     public Event getEventByEventName(@PathVariable String eventName) {
