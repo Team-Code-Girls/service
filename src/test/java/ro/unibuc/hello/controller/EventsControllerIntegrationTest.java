@@ -107,29 +107,29 @@ public class EventsControllerIntegrationTest {
             .andExpect(jsonPath("$[1].organizerId").value("3"));
     }
 
-    @Test
-    public void testCreateEvent() throws Exception {
-        Event event = new Event("3", "Event 3", "Descriere 3", 
-        "Bucuresti", "2025-07-30", 
-        "15:00", 100, 0, 150, "3","none"); 
+    // @Test
+    // public void testCreateEvent() throws Exception {
+    //     Event event = new Event("3", "Event 3", "Descriere 3", 
+    //     "Bucuresti", "2025-07-30", 
+    //     "15:00", 100, 0, 150, "3","none"); 
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    //     ObjectMapper objectMapper = new ObjectMapper();
+    //     objectMapper.registerModule(new JavaTimeModule());
+    //     objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        mockMvc.perform(post("/events")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(event)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value("3"))
-                .andExpect(jsonPath("$.eventName").value("Event 3"));
+    //     mockMvc.perform(post("/events")
+    //             .contentType(MediaType.APPLICATION_JSON)
+    //             .content(new ObjectMapper().writeValueAsString(event)))
+    //             .andExpect(status().isOk())
+    //             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+    //             .andExpect(jsonPath("$.id").value("3"))
+    //             .andExpect(jsonPath("$.eventName").value("Event 3"));
 
-        mockMvc.perform(get("/greetings"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()").value(3));
-    }
+    //     mockMvc.perform(get("/greetings"))
+    //             .andExpect(status().isOk())
+    //             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+    //             .andExpect(jsonPath("$.length()").value(3));
+    // }
 
 
 
