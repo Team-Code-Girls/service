@@ -210,8 +210,9 @@ public class EventsServiceTest {
 
     @Test 
     void testCheckSales_NoIncrease(){
+        LocalDate date = LocalDate.now();
         EventEntity eventEntity = new EventEntity("1", "Event Service", "Descriere", 
-                                                  "Bucuresti", LocalDate.parse("2025-03-25"), 
+                                                  "Bucuresti", date, 
                                                   "14:00", 100, 80, 50, "3","none");    
         when(eventRepository.save(any(EventEntity.class))).thenReturn(eventEntity);
 
@@ -251,8 +252,9 @@ public class EventsServiceTest {
 
     @Test 
     void testIncreasePriceOnEventDay_Valid(){
+        LocalDate date = LocalDate.now();
         EventEntity eventEntity = new EventEntity("1", "Event Service", "Descriere", 
-                                 "Bucuresti", LocalDate.parse("2025-03-25"), 
+                                 "Bucuresti", date, 
                                  "14:00", 100, 81, 50, "3","none");   
                                  
         when(eventRepository.findById("1")).thenReturn(Optional.of(eventEntity));
