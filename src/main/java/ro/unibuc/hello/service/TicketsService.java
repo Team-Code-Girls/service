@@ -46,7 +46,7 @@ public class TicketsService {
         entity.setYear(ticket.getYear());
         entity.setPrice(ticket.getPrice());
         ticketsRepository.save(entity);
-        return new Ticket(entity.getId(), entity.getEventId(), entity.getUserId(),
+        return new Ticket(entity.getId(), entity.getUserId(), entity.getEventId(),
                 entity.getDay(), entity.getMonth(), entity.getYear(), entity.getPrice());
     }
 
@@ -130,7 +130,7 @@ public class TicketsService {
             String mostPopularEventId = eventCount.entrySet().stream()
                     .max(Map.Entry.comparingByValue())
                     .map(Map.Entry::getKey)
-                    .orElseThrow(() -> new NoEventsFoundException("No events found in this age range."));
+                    .orElse(null);
 
             String eventName = eventRepository.findById(mostPopularEventId)
                     .map(EventEntity::geteventName)
