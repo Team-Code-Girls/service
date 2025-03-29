@@ -225,7 +225,8 @@ public class EventsServiceTest {
 
     @Test 
     void testAddDiscount_Valid(){
-        EventEntity eventEntity = new EventEntity("1","Event Service", "Descriere","Bucuresti", LocalDate.parse("2025-03-28"),"14:00", 200, 0, 100, "3","none");
+        LocalDate date = LocalDate.now();
+        EventEntity eventEntity = new EventEntity("1","Event Service", "Descriere","Bucuresti", date,"14:00", 200, 0, 100, "3","none");
         when(eventRepository.findById("1")).thenReturn(Optional.of(eventEntity));
         when(eventRepository.save(any(EventEntity.class))).thenReturn(eventEntity);
 

@@ -215,17 +215,18 @@ public class EventsControllerTest {
                 .andExpect(jsonPath("$.ticketPrice").value(80))
                 .andExpect(jsonPath("$.organizerId").value("3"));
     }
-        @Test
-        void test_increasePriceOnEventDay_notEventDay() throws Exception {
-                EventEntity eventEntity = new EventEntity("1", "Event 1", "Descriere", "Bucuresti", LocalDate.parse("2025-03-28"), "14:00", 200, 0, 100, "3", "none");
+    
+    @Test
+    void test_increasePriceOnEventDay_notEventDay() throws Exception {
+        EventEntity eventEntity = new EventEntity("1", "Event 1", "Descriere", "Bucuresti", LocalDate.parse("2025-03-28"), "14:00", 200, 0, 100, "3", "none");
 
-                Event event = new Event("1", "Event 1", "Descriere", "Bucuresti", LocalDate.parse("2025-03-28"), "14:00", 200, 0, 100, "3", "none");
+        Event event = new Event("1", "Event 1", "Descriere", "Bucuresti", LocalDate.parse("2025-03-28"), "14:00", 200, 0, 100, "3", "none");
 
-                when(eventService.increasePriceOnEventDay("1")).thenReturn(event);
+        when(eventService.increasePriceOnEventDay("1")).thenReturn(event);
 
-                mockMvc.perform(put("/events/eventDayPrice/{id}", "1"))
-                        .andExpect(status().isOk())  
-                        .andExpect(jsonPath("$.ticketPrice").value(100));  
+        mockMvc.perform(put("/events/eventDayPrice/{id}", "1"))
+                .andExpect(status().isOk())  
+                .andExpect(jsonPath("$.ticketPrice").value(100));  
         }
 
 
