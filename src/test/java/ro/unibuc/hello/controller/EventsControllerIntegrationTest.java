@@ -107,31 +107,126 @@ public class EventsControllerIntegrationTest {
             .andExpect(jsonPath("$[1].organizerId").value("3"));
     }
 
-    // @Test
-    // public void testCreateEvent() throws Exception {
-    //     Event event = new Event("3", "Event 3", "Descriere 3", 
-    //     "Bucuresti", "2025-07-30", 
-    //     "15:00", 100, 0, 150, "3","none"); 
+    @Test
+    public void testCreateEvent() throws Exception {
+        Event event = new Event("3", "Event 3", "Descriere 3", 
+        "Bucuresti", LocalDate.parse("2025-07-30"), 
+        "15:00", 100, 0, 150, "3", "none"); 
 
-    //     ObjectMapper objectMapper = new ObjectMapper();
-    //     objectMapper.registerModule(new JavaTimeModule());
-    //     objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());  
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);  
 
-    //     mockMvc.perform(post("/events")
-    //             .contentType(MediaType.APPLICATION_JSON)
-    //             .content(new ObjectMapper().writeValueAsString(event)))
-    //             .andExpect(status().isOk())
-    //             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    //             .andExpect(jsonPath("$.id").value("3"))
-    //             .andExpect(jsonPath("$.eventName").value("Event 3"));
+        mockMvc.perform(post("/events")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(event))) 
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value("3"))
+                .andExpect(jsonPath("$.eventName").value("Event 3"));
+    }
 
-    //     mockMvc.perform(get("/greetings"))
-    //             .andExpect(status().isOk())
-    //             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-    //             .andExpect(jsonPath("$.length()").value(3));
-    // }
+    @Test
+    public void testUpdateEvent() throws Exception {
+
+        Event event = new Event("1", "Event Updated", "Descriere 1", 
+                    "Bucuresti", LocalDate.parse("2025-06-30"), 
+                    "14:00", 200, 0, 100, "3","none"); 
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());  
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);  
+            
+        mockMvc.perform(put("/events/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(event)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.eventName").value("Event Updated"));
+
+        mockMvc.perform(get("/events"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].eventName").value("Event Updated"))
+                .andExpect(jsonPath("$[1].eventName").value("Event 2"));
+    }
+
+    @Test 
+    public void deleteEvent() throws Exception{
+
+        mockMvc.perform(delete("/events/1"))
+               .andExpect(status().isOk());
+
+        mockMvc.perform(get("/events"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].eventName").value("Event 2"));        
+    }
+
+    @Test 
+    public void increasePriceOnEventDay() throws Exception{
+
+        LocalDate date = LocalDate.now();
+
+        Event event = new Event("1", "Event 1", "Descriere 1", 
+                    "Bucuresti", date, 
+                    "14:00", 200, 0, 100, "3","none"); 
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());  
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);  
+
+        mockMvc.perform(put("/events/1")
+               .contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(event)))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.id").value("1"))
+               .andExpect(jsonPath("$.date").value(date.toString()));
+        
+        mockMvc.perform(put("/events/eventDayPrice/1")
+               .contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(event)))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.ticketPrice").value(130));
+    }
+
+    @Test 
+    public void addDiscount()throws Exception{
+        LocalDate date = LocalDate.now();
+
+        Event event = new Event("1", "Event 1", "Descriere 1", 
+                    "Bucuresti", date, 
+                    "14:00", 200, 0, 100, "3","none"); 
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());  
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);  
+
+        mockMvc.perform(put("/events/1")
+               .contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(event)))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.id").value("1"))
+               .andExpect(jsonPath("$.date").value(date.toString()));
+        
+        mockMvc.perform(put("/events/discount/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(event)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.ticketPrice").value(80));
 
 
+
+
+    }
 
 
 }
