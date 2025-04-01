@@ -201,7 +201,7 @@ Content-Type: application/json
 {
     "id": "5",
     "userId": "5",
-    "eventId": "2",
+    "eventId": "evNormal",
     "day": 30,
     "month": 6,
     "year": 2025
