@@ -1,9 +1,13 @@
 package ro.unibuc.hello.service;
 
+
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import org.mockito.Mockito;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +35,9 @@ public class EventsServiceTest {
 
     @Mock 
     private EventRepository eventRepository;
+
+    @Mock
+    private MeterRegistry metricsRegistry;
 
     @InjectMocks
     private EventService eventService = new EventService();
@@ -63,6 +70,11 @@ public class EventsServiceTest {
 
     @Test 
     void testGetAllEvents(){
+
+        Counter counterMock = Mockito.mock(Counter.class);
+        when(metricsRegistry.counter(anyString(), anyString(), anyString())).thenReturn(counterMock);
+        doNothing().when(counterMock).increment();
+        
         List<EventEntity> events = Arrays.asList(
             new EventEntity("1","Event 1", "Descriere 1","Bucuresti", LocalDate.parse("2025-03-30"),"14:00", 200, 0, 100, "3","none"),
             new EventEntity("2", "Event 2", "Descriere 2","Bucuresti", LocalDate.parse("2025-03-29"),"16:00", 100, 0, 50, "4","none")

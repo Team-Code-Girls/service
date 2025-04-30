@@ -1,5 +1,6 @@
 package ro.unibuc.hello.service;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class EventService {
 
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private MeterRegistry metricsRegistry;
 
     private Event convertToDTO(EventEntity eventEntity) {
         Event eventDTO = new Event();
@@ -66,6 +70,7 @@ public class EventService {
     }
 
     public List<Event> getAllEvents(){
+        metricsRegistry.counter("my_non_aop_metric", "endpoint", "events").increment(counter.incrementAndGet());
         return eventRepository.findAll()
                               .stream()
                               .map(this::convertToDTO)

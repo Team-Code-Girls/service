@@ -34,6 +34,8 @@ public class EventsController {
        
     }
 
+    @Timed(value = "events.fetch.time", description = "Time taken to return events")
+    @Counted(value = "events.fetch.count", description = "Times events were returned")
     @GetMapping("/events")
     public List<Event> getAllEvents() {
         return eventsService.getAllEvents();
