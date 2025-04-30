@@ -1,5 +1,6 @@
 package ro.unibuc.hello.controller;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,15 +23,24 @@ import java.util.Optional;
 @RestController
 public class TicketsController {
 
+    private final MeterRegistry meterRegistry;
+
     @Autowired
     private TicketsService ticketsService;
 
     @Autowired
     private BuyTicketService buyTicketService;
 
+    public TicketsController(TicketsService ticketsService, BuyTicketService buyTicketService,MeterRegistry meterRegistry ) {
+        this.ticketsService = ticketsService;
+        this.buyTicketService = buyTicketService;
+        this.meterRegistry = meterRegistry;
+    }
+
     @PostMapping("/tickets/buy/discount/{eventId}/{userId}/{discount}")
     @ResponseBody
     public void buyTicketWithDiscountRoute(@PathVariable String eventId, @PathVariable String userId, @PathVariable int discount){
+        meterRegistry.counter("tickets.purchases.count").increment();
         buyTicketService.buyTicketWithDiscount(eventId, userId, discount);
     }
 
