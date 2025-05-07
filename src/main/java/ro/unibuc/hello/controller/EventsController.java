@@ -42,6 +42,7 @@ public class EventsController {
         
     }
 
+    @Counted(value = "eventsId.fetch.count", description = "Times events were returned")
     @GetMapping("/events/{id}")
     public Event getEventById(@PathVariable String id) {
         return eventsService.getEventById(id);
@@ -58,6 +59,7 @@ public class EventsController {
         return eventsService.increasePriceOnEventDay(id);
     }
 
+    @Counted(value = "events.update.count", description = "Times events were returned")
     @PutMapping("/events/{id}")
     public Event updateEvent(@PathVariable String id, @RequestBody EventEntity event) {
         return eventsService.updateEvent(id, event);
@@ -73,13 +75,14 @@ public class EventsController {
         eventsService.deleteAllEvents();
     }
 
+    @Counted(value = "eventsName.fetch.count", description = "Times events were returned")
     @GetMapping("/events/eventName/{eventName}")
     public Event getEventByEventName(@PathVariable String eventName) {
         return eventsService.getEventByEventName(eventName);
       
     }
     
-
+    @Counted(value = "eventsOrganizerId.fetch.count", description = "Times events were returned")
     @GetMapping("/events/organizer/{organizerId}")
     public List<Event> getEventsByOrganizerId(@PathVariable String organizerId) {
 

@@ -40,7 +40,7 @@ public class TicketsController {
     @PostMapping("/tickets/buy/discount/{eventId}/{userId}/{discount}")
     @ResponseBody
     public void buyTicketWithDiscountRoute(@PathVariable String eventId, @PathVariable String userId, @PathVariable int discount){
-        meterRegistry.counter("tickets.purchases.count").increment();
+        //meterRegistry.counter("tickets.purchases.count").increment();
         buyTicketService.buyTicketWithDiscount(eventId, userId, discount);
     }
 

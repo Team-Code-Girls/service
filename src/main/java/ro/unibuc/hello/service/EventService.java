@@ -70,7 +70,6 @@ public class EventService {
     }
 
     public List<Event> getAllEvents(){
-        metricsRegistry.counter("my_non_aop_metric", "endpoint", "events").increment(counter.incrementAndGet());
         return eventRepository.findAll()
                               .stream()
                               .map(this::convertToDTO)
