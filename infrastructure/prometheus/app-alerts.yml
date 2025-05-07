@@ -18,3 +18,52 @@ groups:
         annotations:
           summary: Increased info retrieval rate {{ $labels.value}} {{ $value }}
           description: "A container has disappeared\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+groups:
+  - name: app-availability-performance-quality
+    rules:
+
+    - alert: HighErrorRate
+      expr: rate(http_server_requests_seconds_count{status=~"5.."}[1m]) > 0.1
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High 5xx error rate detected"
+        description: "More than 10% of requests are failing with 5xx status codes"
+
+    - alert: SlowResponses
+      expr: histogram_quantile(0.95, rate(http_server_requests_seconds_bucket[1m])) > 2
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Slow responses detected"
+        description: "95th percentile response time is over 2 seconds"
+
+    # 3. Quality alert: custom app error counter
+    - alert: HighAppErrorCount
+      expr: rate(events_error_count[1m]) > 0.05
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Application error rate too high"
+        description: "The rate of internal app errors is over 0.05/s"
+
+    - alert: EventsFetchToLong
+      expr: events_fetch_time_seconds_max > 1
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Events fetch took to long"
+
+    - alert: ApplicationUp
+      expr: up{job="spring-hello-app"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Application is not up"
+
