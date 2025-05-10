@@ -193,6 +193,15 @@ public class EventsControllerTest {
               .andExpect(status().isOk()); 
 
     }
+    @Test
+    void test_deleteAllEvents() throws Exception {
+        doNothing().when(eventService).deleteAllEvents(); 
+
+        mockMvc.perform(delete("/events"))
+                .andExpect(status().isOk()); 
+    }
+
+    
 
     @Test
     void test_addDiscount() throws Exception {
