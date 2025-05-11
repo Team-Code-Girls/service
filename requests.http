@@ -286,6 +286,6 @@ Content-Type: application/json
     "points": "{{postUserPoints2}}"
 }
 
-POST http://localhost:8080/tickets/buy/evIncrease/3
+POST http://localhost:8080/tickets/buy/12345/3
 
 POST http://localhost:8080/tickets/buy/discount/12345/3/100

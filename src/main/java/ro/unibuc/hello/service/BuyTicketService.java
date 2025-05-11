@@ -1,5 +1,7 @@
 package ro.unibuc.hello.service;
 
+import io.micrometer.core.instrument.Counter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,6 +50,9 @@ public class BuyTicketService {
     @Autowired 
     private UsersService usersService;
 
+        
+
+
     public void buyTicket(String eventId, String userId){
 
         EventEntity event = eventRepository.findById(eventId).orElseThrow(
@@ -72,6 +77,7 @@ public class BuyTicketService {
             int idTicket = tickets.size();
             TicketEntity ticket = new TicketEntity(String.valueOf(idTicket), eventId, userId, day, month, year, price);
             ticketRepository.save(ticket);
+
             
             int numberOfPoints = 0;
 

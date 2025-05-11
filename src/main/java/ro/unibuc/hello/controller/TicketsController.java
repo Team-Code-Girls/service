@@ -1,5 +1,6 @@
 package ro.unibuc.hello.controller;
 
+import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,20 +24,18 @@ import java.util.Optional;
 @RestController
 public class TicketsController {
 
-    private final MeterRegistry meterRegistry;
-
     @Autowired
     private TicketsService ticketsService;
 
     @Autowired
     private BuyTicketService buyTicketService;
 
-    public TicketsController(TicketsService ticketsService, BuyTicketService buyTicketService,MeterRegistry meterRegistry ) {
+    public TicketsController(TicketsService ticketsService, BuyTicketService buyTicketService) {
         this.ticketsService = ticketsService;
         this.buyTicketService = buyTicketService;
-        this.meterRegistry = meterRegistry;
     }
 
+    @Timed(value = "buy_discounted_ticket.execution", description = "Time taken to execute buyTicketWithDiscount method")
     @PostMapping("/tickets/buy/discount/{eventId}/{userId}/{discount}")
     @ResponseBody
     public void buyTicketWithDiscountRoute(@PathVariable String eventId, @PathVariable String userId, @PathVariable int discount){
@@ -44,6 +43,7 @@ public class TicketsController {
         buyTicketService.buyTicketWithDiscount(eventId, userId, discount);
     }
 
+    @Timed(value = "buy_ticket.execution", description = "Time taken to execute buyTicket method")
     @PostMapping("/tickets/buy/{eventId}/{userId}")
     @ResponseBody
     public void buyTicketRoute(@PathVariable String eventId, @PathVariable String userId){

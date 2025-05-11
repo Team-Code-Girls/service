@@ -28,14 +28,14 @@ public class EventsController {
     private EventService eventsService;
 
 
+    @Counted(value = "events.create.count", description = "Events created")
     @PostMapping("/events")
     public Event createEvent(@RequestBody EventEntity event) {
         return eventsService.createEvent(event);
        
     }
 
-    @Timed(value = "events.fetch.time", description = "Time taken to return events")
-    @Counted(value = "events.fetch.count", description = "Times events were returned")
+    @Timed(value = "events.fetch.time", description = "Time taken to fetch all events.")
     @GetMapping("/events")
     public List<Event> getAllEvents() {
         return eventsService.getAllEvents();
