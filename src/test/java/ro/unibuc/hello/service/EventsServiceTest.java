@@ -61,6 +61,34 @@ public class EventsServiceTest {
 
     }
 
+    @Test
+    void testSaveEvent() {
+       
+        Event inputEvent = new Event(
+            "1", "Sample Event", "Sample Description", "Bucharest",
+            LocalDate.parse("2025-06-01"), "18:00", 100, 10, 50,
+            "org123", "none"
+        );
+
+        Event result = eventService.saveEvent(inputEvent);
+
+        assertNotNull(result);
+        assertEquals(inputEvent.getId(), result.getId());
+        assertEquals(inputEvent.geteventName(), result.geteventName());
+        assertEquals(inputEvent.getDescription(), result.getDescription());
+        assertEquals(inputEvent.getLocation(), result.getLocation());
+        assertEquals(inputEvent.getDate(), result.getDate());
+        assertEquals(inputEvent.getTime(), result.getTime());
+        assertEquals(inputEvent.getTotalTickets(), result.getTotalTickets());
+        assertEquals(inputEvent.getSoldTickets(), result.getSoldTickets());
+        assertEquals(inputEvent.getTicketPrice(), result.getTicketPrice());
+        assertEquals(inputEvent.getOrganizerId(), result.getOrganizerId());
+        assertEquals(inputEvent.getPriceOperation(), result.getPriceOperation());
+
+        verify(eventRepository, times(1)).save(any(EventEntity.class));
+    }
+
+
     @Test 
     void testGetAllEvents(){
         List<EventEntity> events = Arrays.asList(
@@ -251,6 +279,51 @@ public class EventsServiceTest {
 
     }
 
+    @Test
+    void testAddDiscount_TooEarlyForDiscount() {
+        LocalDate futureDate = LocalDate.now().plusDays(10);
+        EventEntity eventEntity = new EventEntity("2", "Event", "Desc", 
+                                                "Cluj", futureDate, "12:00", 
+                                                100, 0, 100, "3", "none");
+
+        when(eventRepository.findById("2")).thenReturn(Optional.of(eventEntity));
+
+        eventService.addDiscount("2");
+
+        assertEquals(100, eventEntity.getTicketPrice()); 
+        assertEquals("none", eventEntity.getPriceOperation());
+    }
+
+   @Test
+    void testAddDiscount_EventNotFound() {
+        when(eventRepository.findById("1")).thenReturn(Optional.empty());
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
+            eventService.addDiscount("1");
+        });
+
+        assertEquals("Entity: No event with id:1 was not found", exception.getMessage());
+    }
+
+
+
+    @Test
+    void testAddDiscount_EventInPast() {
+        LocalDate pastDate = LocalDate.now().minusDays(1);
+        EventEntity eventEntity = new EventEntity("4", "Past Event", "Desc", 
+                                                "Iasi", pastDate, "10:00", 
+                                                100, 20, 100, "3", "none");
+
+        when(eventRepository.findById("4")).thenReturn(Optional.of(eventEntity));
+
+        eventService.addDiscount("4");
+
+        assertEquals(100, eventEntity.getTicketPrice()); 
+        assertEquals("none", eventEntity.getPriceOperation());
+    }
+
+
+
     @Test 
     void testIncreasePriceOnEventDay_Valid(){
         LocalDate date = LocalDate.now();
@@ -268,6 +341,21 @@ public class EventsServiceTest {
 
         
     }
+
+   @Test
+    void testIncreasePriceOnEventDay_NotToday() {
+        LocalDate date = LocalDate.now().plusDays(1); 
+        EventEntity eventEntity = new EventEntity("5", "Event", "Desc", "Iasi", 
+            date, "15:00", 100, 20, 100, "3", "none");
+
+        when(eventRepository.findById("5")).thenReturn(Optional.of(eventEntity));
+
+        Event result = eventService.increasePriceOnEventDay("5");
+
+        assertEquals(100, result.getTicketPrice());
+        assertEquals("none", result.getPriceOperation()); 
+    }
+
 
 
 
