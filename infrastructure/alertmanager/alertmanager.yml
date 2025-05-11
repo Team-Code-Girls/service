@@ -11,9 +11,9 @@ route:
 receivers:
 - name: 'email'
   email_configs:
-  - to: 'app.debugmail.io'
-    from: 'app.debugmail.io'
-    smarthost: smtp.gmail.com:25
+  - to: 'bianca@email.com'
+    from: 'bianca@gmail.com'
+    smarthost: app.debugmail.io:25
     auth_username: '5220808c-3794-46e9-a834-d8451792b04c'
     auth_identity: '5220808c-3794-46e9-a834-d8451792b04c'
     auth_password: 'fca94d1d-6132-4596-a545-3a372df96218'
