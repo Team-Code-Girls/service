@@ -37,7 +37,7 @@ groups:
           summary: "Slow responses detected"
           description: "95th percentile response time is over 2 seconds"
 
-      # 3. Quality alert: custom app error counter
+      #  Quality alert
       - alert: HighAppErrorCount
         expr: rate(events_error_count[1m]) > 0.05
         for: 1m
@@ -48,10 +48,10 @@ groups:
           description: "The rate of internal app errors is over 0.05/s"
 
       - alert: EventsFetchToLong
-        expr: events_fetch_time_seconds_max > 1
+        expr: events_fetch_time_seconds_max > 5s
         for: 1m
         labels:
-          severity: critical
+          severity: warning
         annotations:
           summary: "Events fetch took to long"
 
